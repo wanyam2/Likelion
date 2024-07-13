@@ -38,7 +38,11 @@ django-admin startproject config .
 django-admin startapp backend
 ```
 
-6.setting.py 에서 INSTALLED_APPS에 'backend', 'rest_framework' 넣기
+6. setting.py 에서 INSTALLED_APPS에  아래 코드 추가
+```
+'backend',
+'rest_framework',
+```
 
 7. 마이그레이션
 ```
