@@ -1,10 +1,12 @@
 # Likelion backend
 
 1. 가상환경 생성
-`python -m venv venv`
+window: `python -m venv venv`
+mac: `python3 -m venv venv`
 
 2. 가상환경 활성화
-`source venv/Scripts/activate`
+window: `source venv/Scripts/activate`
+mac: `source venv/bin/activate`
 
 3. 장고 설치
 `pip install django`
