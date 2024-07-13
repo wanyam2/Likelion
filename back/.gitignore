@@ -1,0 +1,4 @@
+config/
+backend/
+manage.py
+db.sqlite3
