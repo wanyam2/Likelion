@@ -1,4 +1,41 @@
 # Likelion backend
+## 서버 실행 방법
+1. 가상환경 활성화
+
+window 
+```
+source venv/Scripts/activate
+```
+mac
+```
+source venv/bin/activate
+```
+2. 마이그레이션
+
+window
+```
+python manage.py makemigrations
+```
+```
+python manage.py migrate
+```
+mac
+```
+python3 manage.py makemigrations
+```
+```
+python3 manage.py migrate
+```
+8. runserver
+
+windows
+```
+python manage.py runserver
+```
+mac
+```
+python3 manage.py runserver
+```
 
 ## django 초기설정 방법
 1. 가상환경 생성
