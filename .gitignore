@@ -1,7 +1,2 @@
-# folders
-config/
-backend/
-
-# .py
-manage.py
-apikey.py
+# Secret
+secrets.json
