@@ -26,7 +26,7 @@ python3 manage.py makemigrations
 ```
 python3 manage.py migrate
 ```
-8. runserver
+3. runserver
 
 windows
 ```
@@ -36,7 +36,66 @@ mac
 ```
 python3 manage.py runserver
 ```
+---
+## git clone 이후 시작 방법
+1. secrets.json을 Likelion/secrets.json이 되도록 위치시킴
+2. 가상환경 생성
 
+window
+```
+python -m venv venv
+```
+mac
+```
+python3 -m venv venv
+```
+3. 가상환경 활성화
+
+window 
+```
+source venv/Scripts/activate
+```
+mac
+```
+source venv/bin/activate
+```
+4. django, djangorestframework, django-cors-headers 라이브러리 설치
+```
+pip install django
+```
+```
+pip install djangorestframework
+```
+```
+pip install django-cors-headers
+```
+5. 마이그레이션
+
+window
+```
+python manage.py makemigrations
+```
+```
+python manage.py migrate
+```
+mac
+```
+python3 manage.py makemigrations
+```
+```
+python3 manage.py migrate
+```
+6. runserver
+
+windows
+```
+python manage.py runserver
+```
+mac
+```
+python3 manage.py runserver
+```
+---
 ## django 초기설정 방법
 1. 가상환경 생성
 
@@ -73,6 +132,7 @@ django-admin startproject config .
 ```
 django-admin startapp backend
 ```
+
 6. config/setting.py의 INSTALLED_APPS에 아래 코드 추가
 ```
 'backend',
