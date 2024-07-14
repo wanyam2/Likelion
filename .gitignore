@@ -1,4 +1,10 @@
+# folders
 config/
 backend/
+
+# .py
 manage.py
+apikey.py
+
+# etc
 db.sqlite3
