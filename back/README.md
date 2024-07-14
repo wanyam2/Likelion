@@ -2,6 +2,7 @@
 
 ## django 초기설정 방법
 1. 가상환경 생성
+
 window
 ```
 python -m venv venv
@@ -11,6 +12,7 @@ mac
 python3 -m venv venv
 ```
 2. 가상환경 활성화
+
 window 
 ```
 source venv/Scripts/activate
@@ -40,11 +42,20 @@ django-admin startapp backend
 'rest_framework',
 ```
 7. 마이그레이션
+
+window
 ```
 python manage.py makemigrations
 ```
 ```
 python manage.py migrate
+```
+mac
+```
+python3 manage.py makemigrations
+```
+```
+python3 manage.py migrate
 ```
 8. runserver
 ```
@@ -65,7 +76,7 @@ from django.urls import path, *include* 라이브러리 추가해야 함
 ```
 path('', include('backend.urls')),
 ```
-4. backend/urls.py 생성 후 아래 코드 작성
+4. backend/urls.py 생성 후 아래 코드 추가
 ```
 from django.urls import path, include
 from . import views
@@ -81,7 +92,7 @@ from django.http import HttpResponse
 
 def main(request):
     message = request.GET.get('키값')
-    print(message)
+    print(message) # 메세지 확인
 
     return HttpResponse(응닶 값)
 
