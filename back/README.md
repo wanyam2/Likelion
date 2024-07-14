@@ -58,8 +58,14 @@ python3 manage.py makemigrations
 python3 manage.py migrate
 ```
 8. runserver
+
+windows
 ```
 python manage.py runserver
+```
+mac
+```
+python3 manage.py runserver
 ```
 
 ## react 연동
