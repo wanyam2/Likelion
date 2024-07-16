@@ -9,19 +9,19 @@ import Settings from './components/main/Settings';
 import WriteDiary from './components/main/WriteDiary';
 
 const App = () => {
-  return (
-      <Router>
-        <Routes>
-          <Route path="/" element={<StartPage />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/main" element={<MainPage />} />
-          <Route path="/previous-diaries" element={<PreviousDiaries />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/write-diary" element={<WriteDiary />} />
-        </Routes>
-      </Router>
-  );
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<StartPage />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/main" element={<MainPage />} />
+                <Route path="/previous-diaries" element={<PreviousDiaries />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/write-diary" element={<WriteDiary />} />
+            </Routes>
+        </Router>
+    );
 };
 
 export default App;
