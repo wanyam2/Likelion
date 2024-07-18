@@ -39,6 +39,7 @@ python3 manage.py runserver
 ---
 ## git clone 이후 시작 방법
 1. secrets.json을 Likelion/secrets.json이 되도록 위치시킴
+
 2. 가상환경 생성
 
 window
