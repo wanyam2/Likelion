@@ -1,0 +1,80 @@
+/* 전체 화면을 기준으로 중앙 정렬 */
+.startpage-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.startpage-content {
+    width: 100%;
+    max-width: 393px;
+    height: auto;
+    background-color: #fff;
+    border-radius: 50px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;
+}
+
+.title {
+    font-size: 50px;
+    font-weight: bold;
+    color: #1a2c5c;
+    margin-bottom: 20px;
+    white-space: nowrap;
+}
+
+.login-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border: 1px solid #1a2c5c;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #1a2c5c;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-option:hover {
+    background-color: #f0f0f0;
+}
+
+.login-option .icon {
+    font-size: 30px;
+    margin-right: 10px;
+}
+
+.login-option .text {
+    font-size: 20px;
+}
+
+/* 모바일 화면에서 제목과 버튼의 크기 조정 */
+@media (max-width: 400px) {
+    .title {
+        font-size: 40px;
+    }
+
+    .login-option {
+        font-size: 18px;
+        padding: 10px;
+    }
+
+    .login-option .icon {
+        font-size: 25px;
+    }
+}
