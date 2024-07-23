@@ -1,5 +1,5 @@
 import jwt
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from rest_framework import status
@@ -10,8 +10,7 @@ from rest_framework_simplejwt.serializers import (
     TokenObtainPairSerializer,
     TokenRefreshSerializer,
 )
-
-from config import settings
+from .kakao_provider import KakaoProvider
 from .models import Diary, User
 from .serializers import (
     UserSerializer,
@@ -19,6 +18,40 @@ from .serializers import (
     CreateDiarySerializer,
     UpdateDiarySerializer,
 )
+
+class KakaoLogin(APIView):
+    def get(self, request):
+        auth_code = request.GET.get('code')
+        if not auth_code:
+            return Response({"error": "Authorization code is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        kakao_provider = KakaoProvider(auth_code)
+        try:
+            access_token = kakao_provider.get_token()
+            kakao_user_id = kakao_provider.login()
+            
+            user, created = User.objects.get_or_create(username=kakao_user_id)
+            if created:
+                user.set_unusable_password()
+                user.save()
+                
+            token = TokenObtainPairSerializer.get_token(user)
+            refresh_token = str(token)
+            access_token = str(token.access_token)
+            
+            res = Response(
+                {
+                    "access": access_token,
+                    "refresh": refresh_token,
+                },
+                status=status.HTTP_200_OK,
+            )
+            res.set_cookie("access", access_token, httponly=True)
+            res.set_cookie("refresh", refresh_token, httponly=True)
+            return res
+        
+        except AppError as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class AuthAPIView(APIView):

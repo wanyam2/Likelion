@@ -7,7 +7,6 @@ window
 source venv/Scripts/activate
 ```
 mac
-```
 source venv/bin/activate
 ```
 2. 마이그레이션

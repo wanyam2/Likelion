@@ -18,12 +18,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from backend.views import AuthAPIView, RegisterAPIView, DiaryAPIView
+from backend.views import AuthAPIView, RegisterAPIView, DiaryAPIView, KakaoLogin    
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("login/", AuthAPIView.as_view()),
-    path("register/", RegisterAPIView.as_view()),
-    path("diary/", DiaryAPIView.as_view()),
-    path("", include("backend.urls")),
+    path("auth/login/", AuthAPIView.as_view(), name="login"),
+    path("auth/register/", RegisterAPIView.as_view(), name="register"),
+    path("diary/", DiaryAPIView.as_view(), name="diary"),
+    path("kakao/login/callback/", KakaoLogin.as_view(), name="kakao_login"),
+    path("", include("backend.urls")),  # 'backend' 앱의 URL을 포함,
 ]
