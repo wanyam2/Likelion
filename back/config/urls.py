@@ -18,17 +18,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from rest_framework import routers
-from backend import views
-
-router = routers.DefaultRouter()
-router.register(r"diary", views.DiaryViewSet)
-router.register(r"user", views.UserViewSet)
+from backend.views import AuthAPIView, RegisterAPIView, DiaryAPIView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include(router.urls)),
-    path('', include("backend.urls")),
+    path("admin/", admin.site.urls),
+    path("login/", AuthAPIView.as_view()),
+    path("register/", RegisterAPIView.as_view()),
+    path("diary/", DiaryAPIView.as_view()),
+    path("", include("backend.urls")),
 ]
-
-urlpatterns += router.urls

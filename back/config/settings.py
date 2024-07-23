@@ -44,8 +44,15 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "backend",
     "rest_framework",
+    "rest_framework_simplejwt",
     "corsheaders",
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ]
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -87,6 +94,8 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+AUTH_USER_MODEL = "backend.User"
 
 
 # Password validation

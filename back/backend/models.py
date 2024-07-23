@@ -1,13 +1,41 @@
 from django.db import models
 from datetime import datetime
-import json
+from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 
 
-# 번호, 유저 이름, 워치 모드, 눈 건강 모드ㅡ 알람 시간, 사용량 모니터링 앱 이름
-class User(models.Model):
-    username = models.CharField(max_length=10)
-    watchmode = models.BooleanField()
+class UserManager(BaseUserManager):
+    def create_user(self, username, email, password, **kwargs):
+        user = self.model(username=username, email=email, **kwargs)
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+
+    def create_superuser(self, username, email, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+
+        return self.create_superuser(username, email, password, **extra_fields)
+
+
+class User(AbstractBaseUser):
+    username = models.CharField(max_length=12, unique=True, null=False)
+    email = models.EmailField(null=False)
+
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=False)
+
+    objects = UserManager()
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
+
+
+class UserSetting(models.Model):
+    userid = models.ForeignKey("User", to_field="id", on_delete=models.CASCADE)
     eyemode = models.BooleanField()
+    watchmode = models.BooleanField()
     alarmtime = models.TimeField(null=True)
     appname = models.CharField(max_length=256)
 
@@ -16,13 +44,3 @@ class Diary(models.Model):
     userid = models.ForeignKey("User", to_field="id", on_delete=models.CASCADE)
     date = models.DateField()
     contents = models.JSONField(null=True, default=dict)
-
-    def save(self, *args, **kwargs):
-        if not self.date:
-            self.date = datetime.now().date()
-            self.contents = {datetime.now().time().strftime("%H:%M:%S"): "WAKE UP"}
-        super().save(*args, **kwargs)
-
-    def add_content(self, content):
-        self.contents[datetime.now().time().strftime("%H:%M:%S")] = content
-        self.save()
