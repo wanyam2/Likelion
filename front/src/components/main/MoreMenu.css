@@ -1,19 +1,18 @@
-/* MoreMenu.css */
 .more-menu-container {
     position: relative;
     width: 100%;
     max-width: 393px;
-    height: 852px;
+    height: 100vh; /* Viewport height to ensure the container fills the screen */
     background-color: #fff;
     margin: 0 auto;
     overflow: hidden;
 }
 
 .header {
-    position: absolute;
+    position: fixed; /* Changed to fixed so it stays at the top */
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100%; /* Make sure the header spans the full width */
     height: 102px;
     background-color: #1a2c5c;
     display: flex;
@@ -24,6 +23,8 @@
     font-weight: bold;
     text-align: center;
     padding-top: 40px;
+    box-sizing: border-box; /* Include padding in width calculation */
+    z-index: 10; /* Ensure it stays above other content */
 }
 
 .header-logo {
@@ -35,13 +36,17 @@
 
 .menu-content {
     position: absolute;
-    top: 102px;
+    top: 120px; /* Adjusted top value to ensure no overlap */
     left: 0;
-    width: 100%;
+    right: 0; /* Ensure the content fills the width */
+    bottom: 0; /* Ensure the content fills the height */
     padding: 20px;
     box-sizing: border-box;
+    overflow-y: auto; /* Add scrolling if content overflows */
+    height: calc(100vh - 102px); /* Dynamically adjust height based on header height */
 }
 
+/* Adjust padding and margins for smaller screens */
 .menu-item {
     margin: 10px 0;
     padding: 10px;
@@ -63,6 +68,10 @@
     .menu-item {
         font-size: 14px;
     }
+
+    .menu-content {
+        top: 130px; /* Adjust top value for smaller screens */
+    }
 }
 
 @media (max-width: 480px) {
@@ -72,5 +81,9 @@
 
     .menu-item {
         font-size: 12px;
+    }
+
+    .menu-content {
+        top: 180px; /* Further adjust top value for very small screens */
     }
 }

@@ -1,7 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './MoreMenu.css'; // CSS 파일을 import
 
 const MoreMenu = () => {
+    const navigate = useNavigate();
+
+    const handleLogoClick = () => {
+        navigate('/main');
+    };
+
     return (
         <div className="more-menu-container">
             <header className="header">
@@ -12,6 +19,7 @@ const MoreMenu = () => {
                     height="20"
                     src="/Vector10_103.png"
                     alt="Close"
+                    onClick={handleLogoClick}
                 />
             </header>
             <div className="menu-content">

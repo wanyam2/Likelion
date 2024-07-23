@@ -5,21 +5,19 @@ body {
 }
 
 .main-container {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    max-width: 393px;
-    height: 852px;
+    height: 100vh;
     background-color: #fff;
-    border-radius: 50px;
     overflow: hidden;
+    padding: 16px;
+    box-sizing: border-box;
 }
 
 .header {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 102px;
     background-color: #1a2c5c;
     display: flex;
     align-items: center;
@@ -28,62 +26,26 @@ body {
     font-size: 30px;
     font-weight: bold;
     text-align: center;
-    padding-top: 40px;
+    padding: 20px 0;
+    position: relative;
 }
 
 .header-logo {
     position: absolute;
-    left: 34px;
-    top: 48px;
-}
-
-.diary-section {
-    position: absolute;
     left: 16px;
-    width: calc(100% - 32px);
-    height: 48px;
-    background-color: #d9d9d900;
-    border: 1px solid #1a2c5c;
-    border-radius: 3px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #1a2c5c;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.diary-section:nth-child(1) {
-    top: 354px;
-}
-
-.diary-section:nth-child(2) {
-    top: 434px;
-}
-
-.diary-section:nth-child(3) {
-    top: 514px;
-}
-
-.diary-section:nth-child(4) {
-    top: 594px;
-}
-
-.diary-section:nth-child(5) {
-    top: 674px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
 }
 
 .greeting-box {
-    position: absolute;
-    left: 16px;
-    top: 140px;
-    width: calc(100% - 32px);
-    height: 130px;
+    width: 100%;
     background-color: #d9d9d900;
     border: 1px solid #1a2c5c;
     border-radius: 2px;
     padding: 16px;
     box-sizing: border-box;
+    margin-top: 16px;
 }
 
 .greeting-text {
@@ -99,7 +61,31 @@ body {
     color: #96a3c3;
 }
 
-/* Media Queries */
+.diary-sections {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 16px;
+    gap: 16px; /* Adds space between sections */
+    flex-grow: 1; /* Makes the container grow to fill available space */
+    justify-content: center;
+}
+
+.diary-section {
+    width: 100%;
+    height: 48px;
+    background-color: #d9d9d900;
+    border: 1px solid #1a2c5c;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a2c5c;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 @media (max-width: 768px) {
     .header {
         font-size: 24px;
