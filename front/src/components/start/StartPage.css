@@ -15,7 +15,8 @@
     height: auto;
     background-color: #fff;
     border-radius: 50px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* box-shadow 제거 */
+    box-shadow: none;
     padding: 20px;
     box-sizing: border-box;
     text-align: center;
