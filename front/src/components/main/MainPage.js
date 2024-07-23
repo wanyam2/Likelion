@@ -1,8 +1,10 @@
-// MainPage.js
 import React from 'react';
-import './MainPage.css'; // CSS 파일을 import
+import { useNavigate } from 'react-router-dom';
+import './MainPage.css';
 
 const MainPage = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="main-container">
             {/* Header */}
@@ -12,17 +14,18 @@ const MainPage = () => {
                     className="header-logo"
                     width="39"
                     height="20"
-                    src="Vector10_71.png"
-                    alt="Logo"
+                    src="/Vector10_71.png"
+                    alt="Menu"
+                    onClick={() => navigate('/more')}
                 />
             </header>
 
             {/* Diary Sections */}
-            <div className="diary-section">오늘의 일기</div>
-            <div className="diary-section">어제의 일기</div>
-            <div className="diary-section">일기 저장소</div>
-            <div className="diary-section">눈 보호모드</div>
-            <div className="diary-section">내 사용량</div>
+            <div className="diary-section" onClick={() => navigate('/diary')}>오늘의 일기</div>
+            <div className="diary-section" onClick={() => navigate('/yesterday-diary')}>어제의 일기</div>
+            <div className="diary-section" onClick={() => navigate('/storage')}>일기 저장소</div>
+            <div className="diary-section" onClick={() => navigate('/eye-protection')}>눈 보호모드</div>
+            <div className="diary-section" onClick={() => navigate('/usage')}>내 사용량</div>
 
             {/* Greeting Box */}
             <div className="greeting-box">

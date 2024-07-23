@@ -1,0 +1,76 @@
+/* MoreMenu.css */
+.more-menu-container {
+    position: relative;
+    width: 100%;
+    max-width: 393px;
+    height: 852px;
+    background-color: #fff;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 102px;
+    background-color: #1a2c5c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 40px;
+}
+
+.header-logo {
+    position: absolute;
+    left: 34px;
+    top: 48px;
+    cursor: pointer;
+}
+
+.menu-content {
+    position: absolute;
+    top: 102px;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.menu-item {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #1a2c5c;
+    color: #f3f6ff;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .header {
+        font-size: 24px;
+    }
+
+    .menu-item {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        font-size: 20px;
+    }
+
+    .menu-item {
+        font-size: 12px;
+    }
+}
