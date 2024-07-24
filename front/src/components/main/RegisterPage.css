@@ -1,0 +1,219 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f9f9f9;
+}
+
+.App {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 100%;
+    max-width: 390px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 390px;
+    height: 100%;
+    min-height: 800px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.header {
+    width: 100%;
+    background-color: #003366;
+    color: white;
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+}
+
+h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.5em;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 60px;
+}
+
+label {
+    margin-top: 20px;
+    font-weight: bold;
+    width: 100%;
+}
+
+input[type="text"] {
+    width: calc(100% - 20px);
+    margin: 5px 0;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #003366;
+}
+
+.terms {
+    width: calc(100% - 20px);
+    margin: 5px 0;
+    padding: 10px;
+    border: 1px solid #003366;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+}
+
+.connected-account {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.connected-account div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #003366;
+    padding: 10px;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: 1px solid #003366;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #003366;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #f1f1f1;
+}
+
+.toggle-button {
+    padding: 10px;
+    border: 1px solid #003366;
+    border-radius: 5px;
+    background-color: #003366;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    width: 80px;
+}
+
+.toggle-button:hover {
+    background-color: #005bb5;
+}
+
+.watch-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.checkbox-container input {
+    margin-right: 10px;
+}
+
+/* 미디어 쿼리 추가: 작은 화면 크기 대응 */
+@media (max-width: 375px) {
+    .container {
+        height: 100%;
+        min-height: 667px;
+        padding: 10px;
+        padding-top: 60px;
+    }
+
+    .header {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.2em;
+    }
+
+    button, .toggle-button {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+
+    input[type="text"], .terms {
+        padding: 8px;
+    }
+}
+
+/* 아이폰 6/7/8 (375px x 667px) */
+@media (max-width: 667px) {
+    .container {
+        height: 100%;
+        min-height: 667px;
+    }
+}
+
+/* 아이폰 X/XS (375px x 812px) */
+@media (max-width: 812px) {
+    .container {
+        height: 100%;
+        min-height: 812px;
+    }
+}
+
+/* 아이폰 XR/11 (414px x 896px) */
+@media (max-width: 896px) {
+    .container {
+        height: 100%;
+        min-height: 896px;
+    }
+}
+
+/* 아이폰 12/12 Pro (390px x 844px) */
+@media (max-width: 844px) {
+    .container {
+        height: 100%;
+        min-height: 844px;
+    }
+}
+
+/* 아이폰 12 Pro Max (428px x 926px) */
+@media (max-width: 926px) {
+    .container {
+        height: 100%;
+        min-height: 926px;
+    }
+}
