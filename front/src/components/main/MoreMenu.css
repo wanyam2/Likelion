@@ -1,7 +1,7 @@
 .more-menu-container {
     position: relative;
-    width: 100%;
     max-width: 393px;
+    /*width: 100%;*/
     height: 100vh; /* Viewport height to ensure the container fills the screen */
     background-color: #fff;
     margin: 0 auto;
@@ -12,7 +12,7 @@
     position: fixed; /* Changed to fixed so it stays at the top */
     top: 0;
     left: 0;
-    width: 100%; /* Make sure the header spans the full width */
+    width: 100%; /* Changed to 100% to fit the screen width */
     height: 102px;
     background-color: #1a2c5c;
     display: flex;
@@ -84,6 +84,54 @@
     }
 
     .menu-content {
-        top: 180px; /* Further adjust top value for very small screens */
+        top: 140px; /* Further adjust top value for very small screens */
+    }
+}
+
+/* 아이폰 X/XS (375px x 812px) */
+@media (max-width: 812px) {
+    .header {
+        height: 90px; /* Adjust height for smaller screen */
+        font-size: 22px;
+    }
+
+    .menu-content {
+        top: 110px; /* Adjust top value for smaller screens */
+    }
+}
+
+/* 아이폰 XR/11 (414px x 896px) */
+@media (max-width: 896px) {
+    .header {
+        height: 90px; /* Adjust height for smaller screen */
+        font-size: 22px;
+    }
+
+    .menu-content {
+        top: 110px; /* Adjust top value for smaller screens */
+    }
+}
+
+/* 아이폰 12/12 Pro (390px x 844px) */
+@media (max-width: 844px) {
+    .header {
+        height: 90px; /* Adjust height for smaller screen */
+        font-size: 22px;
+    }
+
+    .menu-content {
+        top: 110px; /* Adjust top value for smaller screens */
+    }
+}
+
+/* 아이폰 12 Pro Max (428px x 926px) */
+@media (max-width: 926px) {
+    .header {
+        height: 90px; /* Adjust height for smaller screen */
+        font-size: 22px;
+    }
+
+    .menu-content {
+        top: 110px; /* Adjust top value for smaller screens */
     }
 }

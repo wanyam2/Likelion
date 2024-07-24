@@ -15,8 +15,6 @@
     height: auto;
     background-color: #fff;
     border-radius: 50px;
-    /* box-shadow 제거 */
-    box-shadow: none;
     padding: 20px;
     box-sizing: border-box;
     text-align: center;
