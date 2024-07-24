@@ -90,7 +90,8 @@
 }
 
 .diary-submit-button {
-    margin-left: 10px;
+    margin-right: -30px;
+    margin-left: 30px;
 }
 
 .diary-saved-entries {

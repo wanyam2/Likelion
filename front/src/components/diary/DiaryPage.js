@@ -31,7 +31,13 @@ const DiaryPage = () => {
 
     const handleSubmit = () => {
         // 제출 시 처리 로직을 여기에 작성합니다.
-        alert('제출되었습니다!');
+        if (text.trim() || image) {
+            const newEntry = { text, image, date: new Date() };
+            setSavedEntries([...savedEntries, newEntry]);
+            setText(''); // 텍스트를 비웁니다.
+            setImage(null); // 이미지를 비웁니다.
+            alert('제출되었습니다!');
+        }
     };
 
     const now = new Date();
@@ -57,13 +63,15 @@ const DiaryPage = () => {
                     <button onClick={handleSubmit} className="diary-submit-button">제출</button>
                 </div>
                 <div className="diary-saved-entries">
-                    {savedEntries.map((entry, index) => (
-                        <div key={index} className="diary-saved-entry">
-                            {entry.image && <img className="diary-saved-image" src={entry.image} alt="Saved Diary" />}
-                            <p className="diary-saved-text">{entry.text}</p>
-                            <p className="diary-saved-date">{formatDate(entry.date)}</p>
-                        </div>
-                    ))}
+                    {savedEntries.length > 0 ? (
+                        savedEntries.map((entry, index) => (
+                            <div key={index} className="diary-saved-entry">
+                                {entry.image && <img className="diary-saved-image" src={entry.image} alt="Saved Diary" />}
+                                <p className="diary-saved-text">{entry.text}</p>
+                                <p className="diary-saved-date">{formatDate(entry.date)}</p>
+                            </div>
+                        ))
+                    ) : null}
                 </div>
             </div>
             <div className="diary-bottom">

@@ -1,0 +1,154 @@
+.diary-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #fff;
+    box-sizing: border-box;
+    padding: 0 20px;
+}
+
+.diary-header {
+    width: 100%;
+    background-color: #1a2c5c;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: center; /* Horizontally center the content */
+    align-items: center; /* Vertically center the content */
+    box-sizing: border-box; /* Ensures padding does not affect alignment */
+}
+
+.diary-header-background {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.diary-header-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0; /* Remove any default margin */
+}
+
+.diary-content {
+    margin-top: 70px; /* Adjust according to header height */
+    text-align: center;
+    border: none; /* Ensure no border is applied */
+    box-shadow: none; /* Ensure no shadow is applied */
+}
+
+.diary-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1a2c5c;
+    margin-top: 20px;
+}
+
+.diary-oval {
+    width: 250px; /* Adjust width as needed */
+    height: 100px; /* Adjust height as needed */
+    border: 3px solid #1a2c5c; /* Border color and thickness */
+    border-radius: 50%; /* Creates the oval shape */
+    margin: 20px auto;
+    background-color: transparent; /* Ensures the interior is transparent */
+}
+
+.diary-message {
+    margin: 20px 0;
+}
+
+.diary-message-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1a2c5c;
+}
+
+.diary-message-subtitle {
+    font-size: 16px;
+    color: #96a3c3;
+}
+
+.diary-button-area {
+    margin: 20px 0;
+}
+
+.diary-button {
+    background-color: #1a2c5c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.diary-button:hover {
+    background-color: #0d1a3b;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+    .diary-header-title {
+        font-size: 20px;
+    }
+
+    .diary-title {
+        font-size: 20px;
+    }
+
+    .diary-message-title {
+        font-size: 16px;
+    }
+
+    .diary-message-subtitle {
+        font-size: 14px;
+    }
+
+    .diary-button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .diary-oval {
+        width: 200px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .diary-header-title {
+        font-size: 18px;
+    }
+
+    .diary-title {
+        font-size: 18px;
+    }
+
+    .diary-message-title {
+        font-size: 14px;
+    }
+
+    .diary-message-subtitle {
+        font-size: 12px;
+    }
+
+    .diary-button {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .diary-oval {
+        width: 291px;
+        height: 415px;
+    }
+}
