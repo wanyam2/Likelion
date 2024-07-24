@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework.views import APIView, Request
 from rest_framework_simplejwt.exceptions import TokenBackendError, TokenError
 from rest_framework_simplejwt.serializers import (
     TokenObtainPairSerializer,
@@ -18,40 +18,55 @@ from .serializers import (
     CreateDiarySerializer,
     UpdateDiarySerializer,
 )
+from config import settings
+from rest_framework.exceptions import APIException
+
+default_auth_url = 'https://kauth.kakao.com/oauth/authorize'
+kakao_redirect_url = "http://localhost:3000/kakao/callback"
+
+
+def get_kakao_auth_redirect_url():
+    api_key = settings.KAKAO_REST_API_KEY
+    return f'{default_auth_url}?client_id={api_key}&redirect_uri={kakao_redirect_url}&response_type=code'
+
+
+class KakaoPublishURI(APIView):
+
+    def get(self, req: Request):
+        return Response(data=get_kakao_auth_redirect_url(), status=200)
+
 
 class KakaoLogin(APIView):
     def get(self, request):
         auth_code = request.GET.get('code')
+        print(f"auth_code: {auth_code}")
         if not auth_code:
             return Response({"error": "Authorization code is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         kakao_provider = KakaoProvider(auth_code)
-        try:
-            access_token = kakao_provider.get_token()
-            kakao_user_id = kakao_provider.login()
-            
-            user, created = User.objects.get_or_create(username=kakao_user_id)
-            if created:
-                user.set_unusable_password()
-                user.save()
-                
-            token = TokenObtainPairSerializer.get_token(user)
-            refresh_token = str(token)
-            access_token = str(token.access_token)
-            
-            res = Response(
-                {
-                    "access": access_token,
-                    "refresh": refresh_token,
-                },
-                status=status.HTTP_200_OK,
-            )
-            res.set_cookie("access", access_token, httponly=True)
-            res.set_cookie("refresh", refresh_token, httponly=True)
-            return res
+        access_token = kakao_provider.get_token()
+        print(f'access_token: {access_token}')
+        kakao_user_id = kakao_provider.login()
         
-        except AppError as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        user, created = User.objects.get_or_create(username=kakao_user_id)
+        if created:
+            user.set_unusable_password()
+            user.save()
+            
+        token = TokenObtainPairSerializer.get_token(user)
+        refresh_token = str(token)
+        access_token = str(token.access_token)
+        
+        res = Response(
+            {
+                "access": access_token,
+                "refresh": refresh_token,
+            },
+            status=status.HTTP_200_OK,
+        )
+        res.set_cookie("access", access_token, httponly=True)
+        res.set_cookie("refresh", refresh_token, httponly=True)
+        return res
 
 
 class AuthAPIView(APIView):

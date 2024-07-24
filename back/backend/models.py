@@ -1,10 +1,15 @@
 from django.db import models
-from datetime import datetime
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
-
+from django.contrib.auth.models import PermissionsMixin
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, email, password, **kwargs):
+    def create_user(self, username, email, password=None, **kwargs):
+        if not username:
+            raise ValueError("The Username field is required")
+        if not email:
+            raise ValueError("The Email field is required")
+        
+        email = self.normalize_email(email)
         user = self.model(username=username, email=email, **kwargs)
         user.set_password(password)
         user.save(using=self._db)
@@ -16,10 +21,10 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
 
-        return self.create_superuser(username, email, password, **extra_fields)
+        return self.create_user(username, email, password, **extra_fields)
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=12, unique=True, null=False)
     email = models.EmailField(null=False)
 
@@ -28,12 +33,16 @@ class User(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
 
     objects = UserManager()
+
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]
 
+    def __str__(self):
+        return self.username
+
 
 class UserSetting(models.Model):
-    userid = models.ForeignKey("User", to_field="id", on_delete=models.CASCADE)
+    userid = models.ForeignKey(User, on_delete=models.CASCADE)
     eyemode = models.BooleanField()
     watchmode = models.BooleanField()
     alarmtime = models.TimeField(null=True)
@@ -41,6 +50,6 @@ class UserSetting(models.Model):
 
 
 class Diary(models.Model):
-    userid = models.ForeignKey("User", to_field="id", on_delete=models.CASCADE)
+    userid = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField()
     contents = models.JSONField(null=True, default=dict)
