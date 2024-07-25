@@ -6,7 +6,9 @@ window
 ```
 source venv/Scripts/activate
 ```
+
 mac
+```
 source venv/bin/activate
 ```
 2. 마이그레이션
@@ -188,6 +190,7 @@ urlpatterns = [
     path('', views.main),
 ]
 ```
+
 5. backend/views.py에 아래 코드 추가
 ```
 from django.http import HttpResponse
