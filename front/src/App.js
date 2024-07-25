@@ -8,15 +8,14 @@ import PreviousDiary from './components/diary/PreviousDiary';
 import RegisterPage from './components/main/RegisterPage';
 import SettingPage from './components/main/SettingPage';
 import StartPage from "./components/start/StartPage";
-// import StoragePage from './components/other/StoragePage';
-// import EyeProtectionPage from './components/other/EyeProtectionPage';
-// import UsagePage from './components/other/UsagePage';
+import KakaoLoginButton from './components/start/KakaoLoginButton';
+import KakaoRedirectHandler from './components/start/KakaoRedirectHandler';
 
 const App = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<StartPage />} /> {/* 기본 경로를 RegisterPage로 설정 */}
+                <Route path="/" element={<StartPage />} />
                 <Route path="/main" element={<MainPage />} />
                 <Route path="/more" element={<MoreMenu />} />
                 <Route path="/diary" element={<DiaryPage />} />
@@ -24,9 +23,8 @@ const App = () => {
                 <Route path="/previous-diary" element={<PreviousDiary />} />
                 <Route path="/settings" element={<SettingPage />} />
                 <Route path="/register" element={<RegisterPage />} />
-                {/* <Route path="/storage" element={<StoragePage />} /> */}
-                {/* <Route path="/eye-protection" element={<EyeProtectionPage />} /> */}
-                {/* <Route path="/usage" element={<UsagePage />} /> */}
+                <Route path="/kakao/callback" element={<KakaoRedirectHandler />} />
+                <Route path="/kakao-login" element={<KakaoLoginButton />} />
             </Routes>
         </Router>
     );

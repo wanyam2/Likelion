@@ -1,4 +1,5 @@
 import React from 'react';
+import KakaoLoginButton from './KakaoLoginButton'; // KakaoLoginButton 컴포넌트를 import
 import './StartPage.css';
 
 const StartPage = () => {
@@ -16,10 +17,7 @@ const StartPage = () => {
                         <span className="icon">G</span>
                         <span className="text">구글 로그인</span>
                     </div>
-                    <div className="login-option kakao">
-                        <span className="icon">K</span>
-                        <span className="text">카카오 로그인</span>
-                    </div>
+                    <KakaoLoginButton /> {/* KakaoLoginButton 컴포넌트를 사용 */}
                     <div className="login-option naver">
                         <span className="icon">N</span>
                         <span className="text">네이버 로그인</span>
