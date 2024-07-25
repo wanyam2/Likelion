@@ -10,10 +10,15 @@ const KakaoRedirectHandler = () => {
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get('code');
 
+            console.log('Received code:', code);
+
             if (code) {
                 try {
-                    // 백엔드 API 호출하여 토큰을 가져옵니다
+                    // 백엔드 API 호출하여 카카오 로그인 처리
                     const response = await axios.post('/api/kakao/login/', { code });
+
+                    // 디버깅: 응답 데이터 출력
+                    console.log('Kakao login response:', response.data);
 
                     // 로그인 성공 후 페이지 리디렉션
                     if (response.data.is_first_login) {
@@ -25,6 +30,7 @@ const KakaoRedirectHandler = () => {
                     console.error('Kakao login failed:', error);
                 }
             } else {
+                console.log('No code found in URL');
                 navigate('/');
             }
         };
