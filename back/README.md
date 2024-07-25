@@ -39,7 +39,7 @@ python3 manage.py runserver
 ```
 ---
 ## git clone 이후 시작 방법
-1. secrets.json을 Likelion/secrets.json이 되도록 위치시킴
+1. .env을 Likelion/back/.env가 되도록 위치
 
 2. 가상환경 생성
 
@@ -61,16 +61,12 @@ mac
 ```
 source venv/bin/activate
 ```
-4. django, djangorestframework, django-cors-headers 라이브러리 설치
+
+4. 라이브러리 설치
 ```
-pip install django
+pip install -r requirements.txt
 ```
-```
-pip install djangorestframework
-```
-```
-pip install django-cors-headers
-```
+
 5. 마이그레이션
 
 window
