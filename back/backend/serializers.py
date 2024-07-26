@@ -29,38 +29,30 @@ class DiarySerializer(serializers.ModelSerializer):
         model = Diary
         fields = "__all__"
 
-
-class CreateDiarySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Diary
-        fields = ("userid",)
-
     def create(self, validated_data):
+        userid = validated_data.get("userid")
+        date = datetime.now().date()
+
+        if Diary.objects.filter(userid=userid, date=date).exists():
+            raise serializers.ValidationError(
+                "Diary entry for this user and date already exists."
+            )
+
         diary = self.Meta.model(
-            userid=validated_data["userid"],
-            date=datetime.now().date(),
+            userid=userid,
+            date=date,
             contents={datetime.now().time().strftime("%H:%M:%S"): "WAKE UP"},
         )
-
         diary.save()
 
         return diary
-
-
-class UpdateDiarySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Diary
-        fields = (
-            "userid",
-            "contents",
-        )
 
     def update(self, instance, validated_data):
         current_time = datetime.now().time().strftime("%H:%M:%S")
 
         contents = instance.contents if instance.contents else {}
         contents[current_time] = validated_data.get("contents")
-
+        instance.contents = contents
         instance.save()
 
         return instance

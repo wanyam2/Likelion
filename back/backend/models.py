@@ -2,13 +2,14 @@ from django.db import models
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 
+
 class UserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **kwargs):
         if not username:
             raise ValueError("The Username field is required")
         if not email:
             raise ValueError("The Email field is required")
-        
+
         email = self.normalize_email(email)
         user = self.model(username=username, email=email, **kwargs)
         user.set_password(password)
@@ -51,5 +52,5 @@ class UserSetting(models.Model):
 
 class Diary(models.Model):
     userid = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateField()
+    date = models.DateField(null=True)
     contents = models.JSONField(null=True, default=dict)

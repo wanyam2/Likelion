@@ -1,5 +1,5 @@
 import jwt
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from rest_framework import status
@@ -10,24 +10,24 @@ from rest_framework_simplejwt.serializers import (
     TokenObtainPairSerializer,
     TokenRefreshSerializer,
 )
+
 from .kakao_provider import KakaoProvider
 from .models import Diary, User
 from .serializers import (
     UserSerializer,
     RegisterUserSerializer,
-    CreateDiarySerializer,
-    UpdateDiarySerializer,
+    DiarySerializer,
 )
 from config import settings
-from rest_framework.exceptions import APIException
+from datetime import datetime
 
-default_auth_url = 'https://kauth.kakao.com/oauth/authorize'
+default_auth_url = "https://kauth.kakao.com/oauth/authorize"
 kakao_redirect_url = "http://localhost:3000/kakao/callback"
 
 
 def get_kakao_auth_redirect_url():
     api_key = settings.KAKAO_REST_API_KEY
-    return f'{default_auth_url}?client_id={api_key}&redirect_uri={kakao_redirect_url}&response_type=code'
+    return f"{default_auth_url}?client_id={api_key}&redirect_uri={kakao_redirect_url}&response_type=code"
 
 
 class KakaoPublishURI(APIView):
@@ -38,25 +38,28 @@ class KakaoPublishURI(APIView):
 
 class KakaoLogin(APIView):
     def get(self, request):
-        auth_code = request.GET.get('code')
+        auth_code = request.GET.get("code")
         print(f"auth_code: {auth_code}")
         if not auth_code:
-            return Response({"error": "Authorization code is required"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Authorization code is required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         kakao_provider = KakaoProvider(auth_code)
         access_token = kakao_provider.get_token()
-        print(f'access_token: {access_token}')
+        print(f"access_token: {access_token}")
         kakao_user_id = kakao_provider.login()
-        
+
         user, created = User.objects.get_or_create(username=kakao_user_id)
         if created:
             user.set_unusable_password()
             user.save()
-            
+
         token = TokenObtainPairSerializer.get_token(user)
         refresh_token = str(token)
         access_token = str(token.access_token)
-        
+
         res = Response(
             {
                 "access": access_token,
@@ -168,66 +171,66 @@ class RegisterAPIView(APIView):
 
 
 class DiaryAPIView(APIView):
+    def get(self, request):
+        userid = request.query_params.get("userid")
+        date = request.query_params.get("date")
+
+        if not userid:
+            return Response(
+                {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if date:
+            try:
+                diary = Diary.objects.get(userid=userid, date=date)
+            except Diary.DoesNotExist:
+                return Response(
+                    {"error": "Diary not found for the given date"},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+        else:
+            diaries = Diary.objects.filter(userid=userid)
+            if not diaries.exists():
+                return Response(
+                    {"error": "No diaries found for the given user"},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+            serializer = DiarySerializer(diaries, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        serializer = DiarySerializer(diary)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def post(self, request):
-        serializer = CreateDiarySerializer(data=request.data)
+        serializer = DiarySerializer(data=request.data)
         if serializer.is_valid():
             diary = serializer.save()
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request):
-        userid = request.data.get("userid")
+        userid = request.query_params.get("userid")
+
         if not userid:
             return Response(
                 {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
             )
 
         try:
-            diary = Diary.objects.get(userid=userid)
+            date = datetime.now().date()
+            diary = Diary.objects.get(userid=userid, date=date)
         except Diary.DoesNotExist:
             return Response(
                 {"error": "Diary not found"}, status=status.HTTP_404_NOT_FOUND
             )
 
-        serializer = UpdateDiarySerializer(diary, data=request.data)
+        serializer = DiarySerializer(diary, data=request.data)
         if serializer.is_valid():
             diary = serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# class DiaryViewSet(viewsets.ModelViewSet):
-#     queryset = Diary.objects.all()
-#     serializer_class = DiarySerializer
-
-#     def create(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         self.perform_create(serializer)
-#         headers = self.get_success_headers(serializer.data)
-#         return Response(
-#             serializer.data, status=status.HTTP_201_CREATED, headers=headers
-#         )
-
-#     def update(self, request, *args, **kwargs):
-#         partial = kwargs.pop("partial", False)
-#         instance = self.get_object()
-
-#         content = request.data.get("content")
-#         instance.add_content(content)
-
-#         serializer = self.get_serializer(instance, data=request.data, partial=partial)
-#         serializer.is_valid(raise_exception=True)
-
-#         self.perform_update(serializer)
-
-#         if getattr(instance, "_prefetched_objects_cache", None):
-#             instance._prefetched_objects_cache = {}
-
-#         return Response(serializer.data)
 
 
 def main(request):
