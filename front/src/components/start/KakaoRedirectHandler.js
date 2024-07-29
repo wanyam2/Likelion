@@ -15,7 +15,7 @@ const KakaoRedirectHandler = () => {
             if (code) {
                 try {
                     // 백엔드 API 호출하여 카카오 로그인 처리
-                    const response = await axios.post('/api/kakao/login/', { code });
+                    const response = await axios.get(`/api/kakao/login/?code=${code}`);
 
                     // 디버깅: 응답 데이터 출력
                     console.log('Kakao login response:', response.data);
@@ -28,6 +28,7 @@ const KakaoRedirectHandler = () => {
                     }
                 } catch (error) {
                     console.error('Kakao login failed:', error);
+                    navigate('/');
                 }
             } else {
                 console.log('No code found in URL');

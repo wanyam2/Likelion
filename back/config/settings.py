@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     "corsheaders",
     "allauth",
     "allauth.account",
-    "allauth.socialaccount",
     "allauth.socialaccount.providers.kakao",
 ]
 

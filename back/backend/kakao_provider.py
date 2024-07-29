@@ -5,7 +5,7 @@ from rest_framework.exceptions import APIException
 
 token_url = "https://kauth.kakao.com/oauth/token"
 login_url = "https://kapi.kakao.com/v2/user/me"
-redirect_uri = "http://localhost:3000/kakao/callback"  # 여기에 실제 리다이렉트 URI를 넣으세요
+redirect_uri = "http://localhost:3000/kakao/callback"  
 
 
 class KakaoTokenException(APIException):

@@ -55,6 +55,15 @@ class KakaoLogin(APIView):
         if created:
             user.set_unusable_password()
             user.save()
+            # 회원가입 페이지로 리다이렉트
+            return Response(
+                {
+                    "access": None,
+                    "refresh": None,
+                    "is_first_login": True
+                },
+                status=status.HTTP_200_OK,
+            )
 
         token = TokenObtainPairSerializer.get_token(user)
         refresh_token = str(token)
@@ -64,6 +73,7 @@ class KakaoLogin(APIView):
             {
                 "access": access_token,
                 "refresh": refresh_token,
+                "is_first_loginn": False,
             },
             status=status.HTTP_200_OK,
         )
