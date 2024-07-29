@@ -7,7 +7,7 @@ const KakaoLogin = () => {
 
     useEffect(() => {
         const code = searchParams.get("code");
-        alert(`code: ${code}`);
+        console.log({ code });
         if (code) {
             axios
                 .get(`http://localhost:8000/kakao/login/callback/?code=${code}`)
