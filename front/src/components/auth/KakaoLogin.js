@@ -1,12 +1,16 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
+import { useSearchParams } from "react-router-dom";
 
 const KakaoLogin = () => {
+    const [searchParams] = useSearchParams();
+
     useEffect(() => {
-        const code = new URL(window.location.href).searchParams.get('code');
+        const code = searchParams.get("code");
+        alert(`code: ${code}`);
         if (code) {
             axios
-                .get(`http://localhost:8000/oauth/callback/kakao/?code=${code}`)
+                .get(`http://localhost:8000/kakao/login/callback/?code=${code}`)
                 .then((response) => {
                     // 로그인 성공 후 처리할 로직을 여기에 추가
                     console.log('Login Success:', response.data);
