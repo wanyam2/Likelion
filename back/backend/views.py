@@ -73,7 +73,7 @@ class KakaoLogin(APIView):
             {
                 "access": access_token,
                 "refresh": refresh_token,
-                "is_first_loginn": False,
+                "is_first_login": False,
             },
             status=status.HTTP_200_OK,
         )
