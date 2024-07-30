@@ -60,22 +60,42 @@
     color: #1a2c5c;
 }
 
-.diary-image {
-    width: 100px; /* Adjust size as needed */
-    height: auto;
+.diary-media-wrapper {
     margin-top: 10px;
+}
+
+.diary-media {
+    max-width: 100%; /* 이미지나 비디오의 크기가 컨테이너를 초과하지 않도록 */
+    height: auto;
 }
 
 .diary-actions {
     display: flex;
-    justify-content: space-between;
-    width: 90%;
-    max-width: 360px;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
     margin: 20px 0;
 }
 
+.diary-upload-button {
+    background-color: #1a2c5c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
 .diary-file-input {
-    display: none;
+    display: none; /* 숨겨진 파일 입력 필드 */
+}
+
+.diary-action-buttons {
+    display: flex;
+    gap: 10px; /* 버튼 간의 간격 조정 */
 }
 
 .diary-save-button, .diary-submit-button {
@@ -87,11 +107,11 @@
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
+    outline: none; /* 버튼의 테두리 선을 없앰 */
 }
 
-.diary-submit-button {
-    margin-right: -30px;
-    margin-left: 30px;
+.diary-save-button:hover, .diary-submit-button:hover {
+    background-color: #163a73; /* 호버 시 색상 변경 */
 }
 
 .diary-saved-entries {
@@ -110,10 +130,13 @@
     box-sizing: border-box;
 }
 
-.diary-saved-image {
-    width: 100px; /* Adjust size as needed */
-    height: auto;
+.diary-saved-media-wrapper {
     margin-top: 10px;
+}
+
+.diary-saved-media {
+    max-width: 100%; /* 이미지나 비디오의 크기가 컨테이너를 초과하지 않도록 */
+    height: auto;
 }
 
 .diary-saved-text {
@@ -162,11 +185,11 @@
         font-size: 14px;
     }
 
-    .diary-image {
+    .diary-media {
         width: 80px; /* Adjust size as needed */
     }
 
-    .diary-save-button, .diary-submit-button {
+    .diary-save-button, .diary-submit-button, .diary-upload-button {
         font-size: 14px;
         padding: 8px 16px;
     }
@@ -187,11 +210,11 @@
         font-size: 12px;
     }
 
-    .diary-image {
+    .diary-media {
         width: 60px; /* Adjust size as needed */
     }
 
-    .diary-save-button, .diary-submit-button {
+    .diary-save-button, .diary-submit-button, .diary-upload-button {
         font-size: 12px;
         padding: 6px 12px;
     }

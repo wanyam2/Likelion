@@ -10,6 +10,7 @@
     background: #f5f5f5; /* 배경색 추가 */
     border-radius: 10px; /* 컨테이너 모서리 둥글게 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    max-width: 100%; /* 화면 너비를 넘지 않도록 설정 */
 }
 
 /* 캘린더 헤더 스타일 */
@@ -19,6 +20,7 @@
     margin-bottom: 15px; /* 더 넓은 여백 */
     width: 100%; /* 화면 너비를 활용 */
     justify-content: space-between; /* 버튼과 제목 사이에 공간 분배 */
+    max-width: 600px; /* 최대 너비 설정 */
 }
 
 /* 화살표 버튼 스타일 */
@@ -49,6 +51,7 @@
     margin: 0 15px;
     text-align: center; /* 제목 중앙 정렬 */
     color: #333; /* 텍스트 색상 */
+    white-space: nowrap; /* 제목이 줄바꿈되지 않도록 설정 */
 }
 
 /* 강조된 날짜 스타일 */
@@ -70,12 +73,28 @@
     .calendar-title {
         font-size: 18px; /* 작은 화면에서 제목 폰트 크기 줄이기 */
     }
+
+    .calendar-container {
+        padding: 15px; /* 모바일 화면에서는 패딩 줄이기 */
+    }
 }
 
-/* 아이폰의 특정 스타일 조정 */
+/* iOS 및 터치 디바이스에 맞춘 스타일 조정 */
 @supports (-webkit-touch-callout: none) {
     .arrow-button {
         font-size: 18px; /* 아이폰에서 버튼 폰트 크기 조정 */
         padding: 12px;
     }
+
+    .calendar-container {
+        max-width: 100%; /* 화면 너비를 넘지 않도록 설정 */
+    }
+}
+
+/* Calendar 컴포넌트가 화면에 잘 맞도록 조정 */
+.react-calendar {
+    max-width: 100%; /* 캘린더가 컨테이너를 넘지 않도록 설정 */
+    background: #ffffff; /* 캘린더 배경색 */
+    border-radius: 8px; /* 캘린더 모서리 둥글게 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
 }

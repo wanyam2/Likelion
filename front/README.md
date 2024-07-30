@@ -13,7 +13,7 @@ src > components > auth > KakaoLogin.js : 카카오 로그인에 관한 기능
 
 src > components > diary > CheckDiary.js : 오늘 하루 일기에 관해 확인
 src > components > diary > DiaryPage.js : 일기 본문 작성 페이지
-src > components > diary > PreviousDiary.js : 과거 일기 확인 
+src > components > diary > Storage.js : 과거 일기 확인 
 
 src > components > main > MainPage.js : 기본 화면
 src > components > main > MoreMenu.js : 더보기란

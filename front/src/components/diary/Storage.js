@@ -1,27 +1,31 @@
-// PreviousDiary.js
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './PreviousDiary.css'; // Import your CSS file for styling
+import './Storage.css'; // Import your CSS file for styling
 
-const PreviousDiary = () => {
+const Storage = () => {
     const [date, setDate] = useState(new Date());
     const [entries, setEntries] = useState([]);
     const navigate = useNavigate();
+    const userId = localStorage.getItem('userId'); // 저장된 사용자 ID를 로드
 
     useEffect(() => {
         const fetchEntries = async () => {
+            if (!userId) return; // 사용자 ID가 없으면 요청하지 않음
+
             try {
-                const response = await axios.get('/api/diary/entries'); // 실제 API 엔드포인트로 수정
-                setEntries(response.data);
+                const response = await axios.get('/api/diary/entries', {
+                    params: { userId } // 사용자 ID를 쿼리 파라미터로 전송
+                });
+                setEntries(response.data.entries); // 응답에서 일기 항목들을 추출
             } catch (error) {
                 console.error('Failed to fetch diary entries:', error);
             }
         };
 
         fetchEntries();
-    }, []);
+    }, [userId]); // userId가 변경될 때마다 재호출
 
     const handleDateClick = (date) => {
         const selectedDate = entries.find(entry =>
@@ -62,4 +66,4 @@ const PreviousDiary = () => {
     );
 };
 
-export default PreviousDiary;
+export default Storage;

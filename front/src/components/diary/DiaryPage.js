@@ -8,34 +8,34 @@ const formatDate = (date) => {
 
 const DiaryPage = () => {
     const [text, setText] = useState(''); // 현재 입력된 글
-    const [image, setImage] = useState(null); // 현재 입력된 이미지
-    const [savedEntries, setSavedEntries] = useState([]); // 저장된 글과 이미지 목록
+    const [media, setMedia] = useState(null); // 현재 입력된 이미지 또는 비디오
+    const [savedEntries, setSavedEntries] = useState([]); // 저장된 글과 미디어 목록
 
     const handleTextChange = (e) => {
         setText(e.target.value);
     };
 
-    const handleImageChange = (e) => {
+    const handleMediaChange = (e) => {
         if (e.target.files[0]) {
-            setImage(URL.createObjectURL(e.target.files[0]));
+            const file = e.target.files[0];
+            setMedia(URL.createObjectURL(file));
         }
     };
 
     const handleSave = () => {
-        if (text.trim() || image) {
-            setSavedEntries([...savedEntries, { text, image, date: new Date() }]);
+        if (text.trim() || media) {
+            setSavedEntries([...savedEntries, { text, media, date: new Date() }]);
             setText(''); // 텍스트를 비웁니다.
-            setImage(null); // 이미지를 비웁니다.
+            setMedia(null); // 미디어를 비웁니다.
         }
     };
 
     const handleSubmit = () => {
-        // 제출 시 처리 로직을 여기에 작성합니다.
-        if (text.trim() || image) {
-            const newEntry = { text, image, date: new Date() };
+        if (text.trim() || media) {
+            const newEntry = { text, media, date: new Date() };
             setSavedEntries([...savedEntries, newEntry]);
             setText(''); // 텍스트를 비웁니다.
-            setImage(null); // 이미지를 비웁니다.
+            setMedia(null); // 미디어를 비웁니다.
             alert('제출되었습니다!');
         }
     };
@@ -49,7 +49,18 @@ const DiaryPage = () => {
             <div className="diary-content">
                 <div className="diary-date">{formattedDate}</div>
                 <div className="diary-entry">
-                    {image && <img className="diary-image" src={image} alt="Diary" />}
+                    {media && (
+                        <div className="diary-media-wrapper">
+                            {media.endsWith('.mp4') ? (
+                                <video className="diary-media" controls>
+                                    <source src={media} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            ) : (
+                                <img className="diary-media" src={media} alt="Diary Media" />
+                            )}
+                        </div>
+                    )}
                     <textarea
                         className="diary-textarea"
                         value={text}
@@ -58,7 +69,16 @@ const DiaryPage = () => {
                     />
                 </div>
                 <div className="diary-actions">
-                    <input type="file" accept="image/*" onChange={handleImageChange} className="diary-file-input" />
+                    <label htmlFor="media-upload" className="diary-upload-button">
+                        첨부하기
+                    </label>
+                    <input
+                        id="media-upload"
+                        type="file"
+                        accept="image/*,video/*"
+                        onChange={handleMediaChange}
+                        className="diary-file-input"
+                    />
                     <button onClick={handleSave} className="diary-save-button">임시 저장</button>
                     <button onClick={handleSubmit} className="diary-submit-button">제출</button>
                 </div>
@@ -66,7 +86,18 @@ const DiaryPage = () => {
                     {savedEntries.length > 0 ? (
                         savedEntries.map((entry, index) => (
                             <div key={index} className="diary-saved-entry">
-                                {entry.image && <img className="diary-saved-image" src={entry.image} alt="Saved Diary" />}
+                                {entry.media && (
+                                    <div className="diary-saved-media-wrapper">
+                                        {entry.media.endsWith('.mp4') ? (
+                                            <video className="diary-saved-media" controls>
+                                                <source src={entry.media} type="video/mp4" />
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        ) : (
+                                            <img className="diary-saved-media" src={entry.media} alt="Saved Diary Media" />
+                                        )}
+                                    </div>
+                                )}
                                 <p className="diary-saved-text">{entry.text}</p>
                                 <p className="diary-saved-date">{formatDate(entry.date)}</p>
                             </div>
