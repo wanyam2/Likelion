@@ -1,3 +1,4 @@
+// App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './components/main/MainPage';
@@ -20,7 +21,7 @@ const App = () => {
                 <Route path="/more" element={<MoreMenu />} />
                 <Route path="/diary" element={<DiaryPage />} />
                 <Route path="/check-diary" element={<CheckDiary />} />
-                <Route path="/previous-diary" element={<PreviousDiary />} />
+                <Route path="/yesterday-diary" element={<PreviousDiary />} /> {/* entries 제거 */}
                 <Route path="/settings" element={<SettingPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/kakao/callback" element={<KakaoRedirectHandler />} />
