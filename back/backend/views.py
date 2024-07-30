@@ -1,7 +1,7 @@
 import jwt
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView, Request
@@ -247,4 +247,4 @@ def main(request):
     message = request.GET.get("키값")
     print(message)  # 메세지 확인
 
-    return HttpResponse("응답 값")
+    return HttpResponseRedirect("http://localhost:3000")
