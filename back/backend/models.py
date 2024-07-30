@@ -43,7 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class UserSetting(models.Model):
-    userid = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     eyemode = models.BooleanField()
     watchmode = models.BooleanField()
     alarmtime = models.TimeField(null=True)
@@ -51,6 +51,18 @@ class UserSetting(models.Model):
 
 
 class Diary(models.Model):
-    userid = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField(null=True)
-    contents = models.JSONField(null=True, default=dict)
+
+    class Meta:
+        unique_together = ("user", "date")
+
+    def __str__(self):
+        return f"{self.user.username} - {self.date}"
+
+
+class DiaryEntry(models.Model):
+    diary = models.ForeignKey(Diary, related_name="entries", on_delete=models.CASCADE)
+    time = models.TimeField()
+    content = models.TextField()
+    image = models.ImageField(upload_to="diary_images/", blank=True, null=True)

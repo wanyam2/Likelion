@@ -10,16 +10,17 @@ from rest_framework_simplejwt.serializers import (
     TokenObtainPairSerializer,
     TokenRefreshSerializer,
 )
-
+from rest_framework.permissions import IsAuthenticated
 from .kakao_provider import KakaoProvider
-from .models import Diary, User
+from .models import User, Diary, DiaryEntry
 from .serializers import (
     UserSerializer,
     RegisterUserSerializer,
     DiarySerializer,
+    DiaryEntrySerializer,
 )
 from config import settings
-from datetime import datetime
+from datetime import date, datetime
 
 default_auth_url = "https://kauth.kakao.com/oauth/authorize"
 kakao_redirect_url = "http://localhost:3000/kakao/callback"
@@ -57,11 +58,7 @@ class KakaoLogin(APIView):
             user.save()
             # 회원가입 페이지로 리다이렉트
             return Response(
-                {
-                    "access": None,
-                    "refresh": None,
-                    "is_first_login": True
-                },
+                {"access": None, "refresh": None, "is_first_login": True},
                 status=status.HTTP_200_OK,
             )
 
@@ -180,71 +177,244 @@ class RegisterAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class DiaryAPIView(APIView):
-    def get(self, request):
-        userid = request.query_params.get("userid")
-        date = request.query_params.get("date")
+# class DiaryAPIView(APIView):
+#     def get(self, request):
+#         userid = request.query_params.get("userid")
+#         date = request.query_params.get("date")
 
+#         if not userid:
+#             return Response(
+#                 {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
+#             )
+
+#         if date:
+#             try:
+#                 diary = Diary.objects.get(userid=userid, date=date)
+#             except Diary.DoesNotExist:
+#                 return Response(
+#                     {"error": "Diary not found for the given date"},
+#                     status=status.HTTP_404_NOT_FOUND,
+#                 )
+#         else:
+#             diaries = Diary.objects.filter(userid=userid)
+#             if not diaries.exists():
+#                 return Response(
+#                     {"error": "No diaries found for the given user"},
+#                     status=status.HTTP_404_NOT_FOUND,
+#                 )
+#             serializer = DiarySerializer(diaries, many=True)
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+
+#         serializer = DiarySerializer(diary)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+
+#     def post(self, request):
+#         serializer = DiarySerializer(data=request.data)
+#         if serializer.is_valid():
+#             diary = serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#     def put(self, request):
+#         userid = request.query_params.get("userid")
+
+#         if not userid:
+#             return Response(
+#                 {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
+#             )
+
+#         try:
+#             date = datetime.now().date()
+#             diary = Diary.objects.get(userid=userid, date=date)
+#         except Diary.DoesNotExist:
+#             return Response(
+#                 {"error": "Diary not found"}, status=status.HTTP_404_NOT_FOUND
+#             )
+
+#         serializer = DiarySerializer(diary, data=request.data)
+#         if serializer.is_valid():
+#             diary = serializer.save()
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DiaryAPIView(APIView):
+    # permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        userid = request.query_params.get("userid")
         if not userid:
             return Response(
-                {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
+                {"detail": "유저ID를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST
             )
 
-        if date:
-            try:
-                diary = Diary.objects.get(userid=userid, date=date)
-            except Diary.DoesNotExist:
-                return Response(
-                    {"error": "Diary not found for the given date"},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
-        else:
-            diaries = Diary.objects.filter(userid=userid)
-            if not diaries.exists():
-                return Response(
-                    {"error": "No diaries found for the given user"},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
-            serializer = DiarySerializer(diaries, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        user = User.objects.get(id=userid)
+        try:
+            user = User.objects.get(id=userid)
+        except User.DoesNotExist:
+            return Response(
+                {"detail": "유저를 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        today = datetime.now().date()
+        diary, created = Diary.objects.get_or_create(user=user, date=today)
+
+        if created:
+            entry = DiaryEntry.objects.create(
+                diary=diary,
+                time=datetime.now().time().strftime("%H:%M:%S"),
+                content="기상",  # 기본 내용
+                image=None,
+            )
+
+            DiaryEntrySerializer(entry)
 
         serializer = DiarySerializer(diary)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def get(self, request, *args, **kwargs):
+        userid = request.query_params.get("userid")
+        if not userid:
+            return Response(
+                {"detail": "유저ID를 입력해주세요."}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        try:
+            user = User.objects.get(id=userid)
+        except User.DoesNotExist:
+            return Response(
+                {"detail": "유저를 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        date = request.query_params.get("date")
+        if not date:
+            return Response(
+                {"detail": "날짜를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        diary = Diary.objects.filter(user=user, date=date).first()
+        if not diary:
+            return Response(
+                {"detail": "오늘의 일기가 없습니다."}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        diary_entries = DiaryEntry.objects.filter(diary_id=diary.pk)
+        if not diary_entries.exists():
+            return Response(
+                {"detail": "해당 날짜의 일기 항목이 없습니다."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = DiaryEntrySerializer(diary_entries, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request):
-        serializer = DiarySerializer(data=request.data)
+
+class DiaryEntryAPIView(APIView):
+    # permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        userid = request.query_params.get("userid")
+        if not userid:
+            return Response(
+                {"detail": "유저ID를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            user = User.objects.get(id=userid)
+        except User.DoesNotExist:
+            return Response(
+                {"detail": "유저를 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        date = request.query_params.get("date")
+        if not date:
+            return Response(
+                {"detail": "날짜를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            diary = Diary.objects.get(user=user, date=date)
+        except Diary.DoesNotExist:
+            return Response(
+                {"detail": "해당 날짜의 일기가 없습니다."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        entry_data = {
+            "diary": diary.id,
+            "time": datetime.now().time().strftime("%H:%M:%S"),
+            "content": request.data.get("content"),
+            "image": request.data.get("image"),  # 이미지 파일 처리
+        }
+
+        serializer = DiaryEntrySerializer(data=entry_data)
         if serializer.is_valid():
-            diary = serializer.save()
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request):
+    def get(self, request, *args, **kwargs):
         userid = request.query_params.get("userid")
+        date = request.query_params.get("date")
+        time = request.query_params.get("time")
 
         if not userid:
             return Response(
-                {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
+                {"detail": "유저ID를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not date:
+            return Response(
+                {"detail": "날짜를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST
             )
 
         try:
-            date = datetime.now().date()
-            diary = Diary.objects.get(userid=userid, date=date)
-        except Diary.DoesNotExist:
+            user = User.objects.get(id=userid)
+        except User.DoesNotExist:
             return Response(
-                {"error": "Diary not found"}, status=status.HTTP_404_NOT_FOUND
+                {"detail": "유저를 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
             )
 
-        serializer = DiarySerializer(diary, data=request.data)
-        if serializer.is_valid():
-            diary = serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            diary = Diary.objects.get(user=user, date=date)
+        except Diary.DoesNotExist:
+            return Response(
+                {"detail": "해당 날짜의 일기가 없습니다."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if time:
+            # 시간 필터링
+            try:
+                query_time = datetime.strptime(time, "%H:%M:%S").time()
+            except ValueError:
+                return Response(
+                    {
+                        "detail": "시간 형식이 올바르지 않습니다. HH:MM:SS 형식을 사용하세요."
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            diary_entries = DiaryEntry.objects.filter(diary=diary, time=query_time)
+        else:
+            # 전체 일기 항목 가져오기
+            diary_entries = DiaryEntry.objects.filter(diary=diary)
+
+        if not diary_entries.exists():
+            return Response(
+                {"detail": "해당 날짜의 일기 항목이 없습니다."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = DiaryEntrySerializer(diary_entries, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 def main(request):
     message = request.GET.get("키값")
     print(message)  # 메세지 확인
 
-    return HttpResponseRedirect("http://localhost:3000")
+    return HttpResponse("응답 값")

@@ -15,19 +15,30 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from backend.views import AuthAPIView, RegisterAPIView, DiaryAPIView, KakaoLogin, KakaoPublishURI  
+
+from backend.views import (
+    AuthAPIView,
+    RegisterAPIView,
+    DiaryAPIView,
+    DiaryEntryAPIView,
+    KakaoLogin,
+    KakaoPublishURI,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/login/", AuthAPIView.as_view(), name="login"),
     path("auth/register/", RegisterAPIView.as_view(), name="register"),
     path("diary/", DiaryAPIView.as_view(), name="diary"),
+    path("diary-entry/", DiaryEntryAPIView.as_view(), name="diary"),
     path("kakao/login/callback/", KakaoLogin.as_view(), name="kakao_login"),
     path("kakao/auth/url/", KakaoPublishURI.as_view()),
-    path('accounts/', include('allauth.urls')),
+    path("accounts/", include("allauth.urls")),
     # path('accounts/', include('accounts.urls')),
     path("", include("backend.urls")),  # 'backend' 앱의 URL을 포함,
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

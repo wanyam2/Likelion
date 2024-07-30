@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Diary, User
+from .models import User, Diary, DiaryEntry
 from datetime import datetime
 
 
@@ -24,35 +24,37 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         return user
 
 
+class DiaryEntrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DiaryEntry
+        fields = "__all__"
+
+
 class DiarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Diary
         fields = "__all__"
 
-    def create(self, validated_data):
-        userid = validated_data.get("userid")
-        date = datetime.now().date()
+    entries = DiaryEntrySerializer(many=True, read_only=False)
 
-        if Diary.objects.filter(userid=userid, date=date).exists():
-            raise serializers.ValidationError(
-                "Diary entry for this user and date already exists."
-            )
+    # def create(self, user):
+    #     date = datetime.now().date()
 
-        diary = self.Meta.model(
-            userid=userid,
-            date=date,
-            contents={datetime.now().time().strftime("%H:%M:%S"): "WAKE UP"},
-        )
-        diary.save()
+    #     if Diary.objects.filter(user=user.pk, date=date).exists():
+    #         raise serializers.ValidationError("다이어리 데이터가 이미 존재합니다.")
 
-        return diary
+    #     diary = self.Meta.model(user=user, date=date)
 
-    def update(self, instance, validated_data):
-        current_time = datetime.now().time().strftime("%H:%M:%S")
+    #     diary.save()
 
-        contents = instance.contents if instance.contents else {}
-        contents[current_time] = validated_data.get("contents")
-        instance.contents = contents
-        instance.save()
+    #     return diary
 
-        return instance
+    # def update(self, instance, validated_data):
+    #     current_time = datetime.now().time().strftime("%H:%M:%S")
+
+    #     contents = instance.contents if instance.contents else {}
+    #     contents[current_time] = validated_data.get("contents")
+    #     instance.contents = contents
+    #     instance.save()
+
+    #     return instance
