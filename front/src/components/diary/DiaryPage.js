@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './DiaryPage.css'; // CSS 파일을 별도로 관리합니다.
 
 const formatDate = (date) => {
@@ -7,18 +8,22 @@ const formatDate = (date) => {
 };
 
 const DiaryPage = () => {
+    const navigate = useNavigate();
     const [text, setText] = useState(''); // 현재 입력된 글
     const [media, setMedia] = useState(null); // 현재 입력된 이미지 또는 비디오
     const [savedEntries, setSavedEntries] = useState([]); // 저장된 글과 미디어 목록
+    const [isChanged, setIsChanged] = useState(false); // 변경 여부 확인
 
     const handleTextChange = (e) => {
         setText(e.target.value);
+        setIsChanged(true);
     };
 
     const handleMediaChange = (e) => {
         if (e.target.files[0]) {
             const file = e.target.files[0];
             setMedia(URL.createObjectURL(file));
+            setIsChanged(true);
         }
     };
 
@@ -27,6 +32,7 @@ const DiaryPage = () => {
             setSavedEntries([...savedEntries, { text, media, date: new Date() }]);
             setText(''); // 텍스트를 비웁니다.
             setMedia(null); // 미디어를 비웁니다.
+            setIsChanged(false); // 변경 사항 초기화
         }
     };
 
@@ -36,7 +42,23 @@ const DiaryPage = () => {
             setSavedEntries([...savedEntries, newEntry]);
             setText(''); // 텍스트를 비웁니다.
             setMedia(null); // 미디어를 비웁니다.
+            setIsChanged(false); // 변경 사항 초기화
             alert('제출되었습니다!');
+        }
+    };
+
+    const handleBack = () => {
+        if (isChanged) {
+            if (window.confirm('변경 사항이 있습니다. 저장하시겠습니까?')) {
+                handleSave();
+                navigate('/main'); // 변경 사항 저장 후 메인 페이지로 이동
+            } else if (window.confirm('저장하지 않고 이동하시겠습니까?')) {
+                navigate('/main'); // 변경 사항 저장하지 않고 메인 페이지로 이동
+            } else {
+                // 취소 버튼을 눌렀을 때 아무 동작도 하지 않음
+            }
+        } else {
+            navigate('/main'); // 변경 사항이 없을 때 바로 메인 페이지로 이동
         }
     };
 
@@ -45,7 +67,10 @@ const DiaryPage = () => {
 
     return (
         <div className="diary-container">
-            <header className="diary-header">오늘의 일기</header>
+            <header className="diary-header">
+                오늘의 일기
+                <button onClick={handleBack} className="diary-back-button">🏠</button>
+            </header>
             <div className="diary-content">
                 <div className="diary-date">{formattedDate}</div>
                 <div className="diary-entry">
