@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './DiaryPage.css'; // CSS 파일을 별도로 관리합니다.
 
 const formatDate = (date) => {
@@ -22,7 +23,7 @@ const DiaryPage = () => {
     const handleMediaChange = (e) => {
         if (e.target.files[0]) {
             const file = e.target.files[0];
-            setMedia(URL.createObjectURL(file));
+            setMedia(file); // 파일 객체를 저장합니다.
             setIsChanged(true);
         }
     };
@@ -36,14 +37,31 @@ const DiaryPage = () => {
         }
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (text.trim() || media) {
-            const newEntry = { text, media, date: new Date() };
-            setSavedEntries([...savedEntries, newEntry]);
-            setText(''); // 텍스트를 비웁니다.
-            setMedia(null); // 미디어를 비웁니다.
-            setIsChanged(false); // 변경 사항 초기화
-            alert('제출되었습니다!');
+            const userId = localStorage.getItem('userId'); // 사용자 ID를 가져옵니다.
+            const formData = new FormData();
+            formData.append('text', text);
+            formData.append('media', media); // media는 파일 객체입니다.
+            formData.append('date', new Date().toISOString().split('T')[0]); // 날짜를 YYYY-MM-DD 형식으로 저장
+
+            try {
+                const response = await axios.post('/api/diary/entry/', formData, {
+                    params: { userId },
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                console.log('Diary entry created:', response.data);
+                setSavedEntries([...savedEntries, { text, media, date: new Date() }]);
+                setText(''); // 텍스트를 비웁니다.
+                setMedia(null); // 미디어를 비웁니다.
+                setIsChanged(false); // 변경 사항 초기화
+                alert('제출되었습니다!');
+            } catch (error) {
+                console.error('Failed to create diary entry:', error);
+                alert('제출에 실패했습니다. 다시 시도해주세요.');
+            }
         }
     };
 
@@ -76,13 +94,13 @@ const DiaryPage = () => {
                 <div className="diary-entry">
                     {media && (
                         <div className="diary-media-wrapper">
-                            {media.endsWith('.mp4') ? (
+                            {media.type.startsWith('video') ? (
                                 <video className="diary-media" controls>
-                                    <source src={media} type="video/mp4" />
+                                    <source src={URL.createObjectURL(media)} type={media.type} />
                                     Your browser does not support the video tag.
                                 </video>
                             ) : (
-                                <img className="diary-media" src={media} alt="Diary Media" />
+                                <img className="diary-media" src={URL.createObjectURL(media)} alt="Diary Media" />
                             )}
                         </div>
                     )}
@@ -113,13 +131,13 @@ const DiaryPage = () => {
                             <div key={index} className="diary-saved-entry">
                                 {entry.media && (
                                     <div className="diary-saved-media-wrapper">
-                                        {entry.media.endsWith('.mp4') ? (
+                                        {entry.media.type.startsWith('video') ? (
                                             <video className="diary-saved-media" controls>
-                                                <source src={entry.media} type="video/mp4" />
+                                                <source src={URL.createObjectURL(entry.media)} type={entry.media.type} />
                                                 Your browser does not support the video tag.
                                             </video>
                                         ) : (
-                                            <img className="diary-saved-media" src={entry.media} alt="Saved Diary Media" />
+                                            <img className="diary-saved-media" src={URL.createObjectURL(entry.media)} alt="Saved Diary Media" />
                                         )}
                                     </div>
                                 )}
