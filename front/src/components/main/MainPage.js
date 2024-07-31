@@ -1,9 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MainPage.css'; // CSS 파일을 import
 
 const MainPage = () => {
     const navigate = useNavigate();
+    const [userName, setUserName] = useState(''); // 사용자 이름 상태
+
+    useEffect(() => {
+        // 사용자 정보를 가져오는 함수
+        const fetchUserInfo = async () => {
+            try {
+                const response = await fetch('/api/auth/', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include', // 쿠키 포함 요청
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setUserName(data.first_name); // 사용자 이름 상태 업데이트
+                } else {
+                    console.error('Failed to fetch user info');
+                }
+            } catch (error) {
+                console.error('Error fetching user info:', error);
+            }
+        };
+
+        fetchUserInfo();
+    }, []);
 
     const handleLogoClick = () => {
         navigate('/more');
@@ -26,7 +52,7 @@ const MainPage = () => {
             <div className="greeting-box">
                 <div className="greeting-text">
                     <span className="greeting-highlight">안녕하세요. </span>
-                    <span className="greeting-name">(이름)</span>
+                    <span className="greeting-name">{userName}</span>
                     <span className="greeting-highlight">님.<br />오늘은 좋은 하루 되셨나요?</span>
                 </div>
             </div>
