@@ -59,9 +59,7 @@ const MainPage = () => {
 
             <div className="diary-sections">
                 <div className="diary-section" onClick={() => navigate('/diary')}>오늘의 일기</div>
-                <div className="diary-section" onClick={() => navigate('/yesterday-diary')}>어제의 일기</div>
                 <div className="diary-section" onClick={() => navigate('/storage')}>일기 저장소</div>
-                <div className="diary-section" onClick={() => navigate('/eye-protection')}>눈 보호모드</div>
                 <div className="diary-section" onClick={() => navigate('/usage')}>내 사용량</div>
             </div>
         </div>
