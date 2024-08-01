@@ -1,42 +1,41 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const KakaoRedirectHandler = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchToken = async () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
+        const handleCallback = async () => {
+            const queryParams = new URLSearchParams(window.location.search);
+            const code = queryParams.get('code');
 
-            console.log('Received code:', code);
+            if (!code) {
+                console.error('Authorization code is missing');
+                navigate('/error');
+                return;
+            }
 
-            if (code) {
-                try {
-                    // 백엔드 API 호출하여 카카오 로그인 처리
-                    const response = await axios.get(`http://localhost:8000/kakao/login/callback/?code=${code}`);
+            try {
+                const response = await axios.get(`http://15.164.76.9:8000/kakao/login`, {
+                    params: { code }
+                });
 
-                    // 디버깅: 응답 데이터 출력
-                    console.log('Kakao login response:', response.data);
+                console.log('Kakao login response:', response.data);
 
-                    // 로그인 성공 후 페이지 리디렉션
-                    if (response.data.is_first_login) {
-                        navigate('/register');
-                    } else {
-                        navigate('/main');
-                    }
-                } catch (error) {
-                    console.error('Kakao login failed:', error);
-                    navigate('/');
+                const { redirect_url } = response.data;
+                if (redirect_url) {
+                    navigate(redirect_url); // RegisterPage로 이동
+                } else {
+                    navigate('/home'); // 기본 페이지로 이동
                 }
-            } else {
-                console.log('No code found in URL');
-                navigate('/');
+            } catch (error) {
+                console.error('Error handling Kakao callback:', error);
+                navigate('/error'); // 에러 페이지로 이동
             }
         };
 
-        fetchToken();
+        handleCallback();
     }, [navigate]);
 
     return <div>Loading...</div>;

@@ -50,13 +50,13 @@ const App = () => {
         <Router>
             <Routes>
                 <Route path="/" element={<StartPage />} />
+                <Route path="/register" element={<RegisterPage />} />
                 <Route path="/main" element={<MainPage />} />
                 <Route path="/more" element={<MoreMenu />} />
                 <Route path="/diary" element={<DiaryPage />} />
                 <Route path="/check-diary" element={<CheckDiary />} />
                 <Route path="/storage" element={<Storage entries={entries} />} />
                 <Route path="/settings" element={<SettingPage />} />
-                <Route path="/register" element={<RegisterPage />} />
                 <Route path="/kakao/callback" element={<KakaoRedirectHandler />} />
                 <Route path="/kakao-login" element={<KakaoLoginButton />} />
             </Routes>
