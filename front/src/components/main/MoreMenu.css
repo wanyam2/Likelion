@@ -1,19 +1,13 @@
 .more-menu-container {
     position: relative;
-    max-width: 393px;
-    /*width: 100%;*/
-    height: 100vh; /* Viewport height to ensure the container fills the screen */
+    width: 100%;
+    height: 100vh;
     background-color: #fff;
-    margin: 0 auto;
     overflow: hidden;
 }
 
 .header {
-    position: fixed; /* Changed to fixed so it stays at the top */
-    top: 0;
-    left: 0;
-    width: 100%; /* Changed to 100% to fit the screen width */
-    height: 102px;
+    width: 100%; /* 화면 너비에 맞게 설정 */
     background-color: #1a2c5c;
     display: flex;
     align-items: center;
@@ -22,31 +16,31 @@
     font-size: 30px;
     font-weight: bold;
     text-align: center;
-    padding-top: 40px;
-    box-sizing: border-box; /* Include padding in width calculation */
-    z-index: 10; /* Ensure it stays above other content */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 102px;
+    box-sizing: border-box; /* 패딩을 너비 계산에 포함시킴 */
+    z-index: 10; /* 다른 콘텐츠보다 위에 표시되도록 설정 */
 }
 
 .header-logo {
     position: absolute;
-    left: 34px;
-    top: 48px;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
 }
 
 .menu-content {
-    position: absolute;
-    top: 120px; /* Adjusted top value to ensure no overlap */
-    left: 0;
-    right: 0; /* Ensure the content fills the width */
-    bottom: 0; /* Ensure the content fills the height */
+    margin-top: 102px; /* 헤더 높이만큼 여백 조정 */
     padding: 20px;
     box-sizing: border-box;
-    overflow-y: auto; /* Add scrolling if content overflows */
-    height: calc(100vh - 102px); /* Dynamically adjust height based on header height */
+    height: calc(100vh - 102px); /* 헤더의 높이에 따라 콘텐츠의 높이 조정 */
+    overflow-y: auto;
 }
 
-/* Adjust padding and margins for smaller screens */
+/* 메뉴 아이템 */
 .menu-item {
     margin: 10px 0;
     padding: 10px;
@@ -59,10 +53,15 @@
     text-align: center;
 }
 
-/* Media Queries */
+/* 미디어 쿼리 */
 @media (max-width: 768px) {
     .header {
         font-size: 24px;
+        height: 90px; /* 작은 화면에서 높이 조정 */
+    }
+
+    .header-logo {
+        left: 12px; /* 왼쪽 여백 조정 */
     }
 
     .menu-item {
@@ -70,13 +69,19 @@
     }
 
     .menu-content {
-        top: 130px; /* Adjust top value for smaller screens */
+        margin-top: 90px; /* 헤더 높이에 맞춰 여백 조정 */
+        height: calc(100vh - 90px);
     }
 }
 
 @media (max-width: 480px) {
     .header {
         font-size: 20px;
+        height: 80px; /* 더 작은 화면에서 높이 조정 */
+    }
+
+    .header-logo {
+        left: 8px; /* 왼쪽 여백 조정 */
     }
 
     .menu-item {
@@ -84,54 +89,93 @@
     }
 
     .menu-content {
-        top: 140px; /* Further adjust top value for very small screens */
+        margin-top: 80px; /* 헤더 높이에 맞춰 여백 조정 */
+        height: calc(100vh - 80px);
     }
 }
 
-/* 아이폰 X/XS (375px x 812px) */
-@media (max-width: 812px) {
-    .header {
-        height: 90px; /* Adjust height for smaller screen */
-        font-size: 22px;
-    }
-
-    .menu-content {
-        top: 110px; /* Adjust top value for smaller screens */
-    }
+/* 기본적으로 블루라이트 필터를 숨김 */
+.blue-light-filter {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 255, 0.2); /* 약간의 파란색 필터 */
+    display: none; /* 기본적으로 숨김 */
+    z-index: 5; /* 헤더 아래에 표시되도록 설정 */
 }
 
-/* 아이폰 XR/11 (414px x 896px) */
-@media (max-width: 896px) {
-    .header {
-        height: 90px; /* Adjust height for smaller screen */
-        font-size: 22px;
-    }
-
-    .menu-content {
-        top: 110px; /* Adjust top value for smaller screens */
-    }
+/* 눈 보호 모드 활성화 시 */
+.blue-light-filter.active {
+    display: block;
 }
 
-/* 아이폰 12/12 Pro (390px x 844px) */
-@media (max-width: 844px) {
-    .header {
-        height: 90px; /* Adjust height for smaller screen */
-        font-size: 22px;
-    }
-
-    .menu-content {
-        top: 110px; /* Adjust top value for smaller screens */
-    }
+.menu-item.switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-/* 아이폰 12 Pro Max (428px x 926px) */
-@media (max-width: 926px) {
-    .header {
-        height: 90px; /* Adjust height for smaller screen */
-        font-size: 22px;
-    }
+/* 스위치 컨테이너 */
+.switch-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
 
-    .menu-content {
-        top: 110px; /* Adjust top value for smaller screens */
-    }
+/* 스위치 */
+.switch {
+    width: 50px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 12px;
+    position: relative;
+    transition: background-color 0.3s;
+    margin-left: 54%; /* 스위치와 텍스트 사이의 간격 */
+}
+
+/* 스위치 안쪽 원 */
+.switch::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+}
+
+/* 스위치 활성화 상태 */
+.switch.active {
+    background-color: #1a2c5c;
+}
+
+.switch.active::before {
+    transform: translateX(26px);
+}
+
+.blue-light-filter {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 223, 155, 0.6); /* 약간 노란색 필터 */
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none; /* 필터가 클릭되지 않도록 함 */
+    z-index: 1000; /* 필터가 다른 콘텐츠 위에 표시되도록 설정 */
+}
+
+.blue-light-filter.active {
+    opacity: 1;
+}
+
+/* 스위치 텍스트 */
+.switch-text {
+    font-size: 16px;
+    color: #1a2c5c;
 }
