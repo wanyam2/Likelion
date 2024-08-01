@@ -196,6 +196,40 @@
     text-align: center;
 }
 
+/* Sleep Data Styles */
+.diary-sleep-data {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #1a2c5c;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+}
+
+.diary-sleep-data h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1a2c5c;
+    margin-bottom: 10px;
+}
+
+.diary-sleep-data ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.diary-sleep-data li {
+    font-size: 16px;
+    color: #1a2c5c;
+    border-bottom: 1px solid #1a2c5c;
+    padding: 10px 0;
+}
+
+.diary-sleep-data li:last-child {
+    border-bottom: none;
+}
+
 /* Media Queries */
 @media (max-width: 768px) {
     .diary-header {
@@ -228,6 +262,10 @@
     .diary-back-button {
         font-size: 14px;
         padding: 8px 16px;
+    }
+
+    .diary-sleep-data {
+        padding: 10px;
     }
 }
 
@@ -262,5 +300,9 @@
     .diary-back-button {
         font-size: 12px;
         padding: 6px 12px;
+    }
+
+    .diary-sleep-data {
+        padding: 8px;
     }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './DiaryPage.css'; // CSS 파일을 별도로 관리합니다.
@@ -14,6 +14,26 @@ const DiaryPage = () => {
     const [media, setMedia] = useState(null); // 현재 입력된 이미지 또는 비디오
     const [savedEntries, setSavedEntries] = useState([]); // 저장된 글과 미디어 목록
     const [isChanged, setIsChanged] = useState(false); // 변경 여부 확인
+    const [sleepData, setSleepData] = useState([]); // 수면 데이터
+    const [errorMessage, setErrorMessage] = useState(null);
+
+    // 수면 데이터 가져오기
+    useEffect(() => {
+        const fetchSleepData = async () => {
+            const userId = localStorage.getItem('userId'); // 사용자 ID를 가져옵니다.
+            try {
+                const response = await axios.get('/api/sleep-data/', {
+                    params: { user_id: userId },
+                });
+                setSleepData(response.data);
+            } catch (error) {
+                setErrorMessage('Failed to fetch sleep data');
+                console.error('Failed to fetch sleep data:', error);
+            }
+        };
+
+        fetchSleepData();
+    }, []);
 
     const handleTextChange = (e) => {
         setText(e.target.value);
@@ -147,6 +167,21 @@ const DiaryPage = () => {
                         ))
                     ) : null}
                 </div>
+                {sleepData.length > 0 && (
+                    <div className="diary-sleep-data">
+                        <h3>수면 데이터</h3>
+                        <ul>
+                            {sleepData.map((entry, index) => (
+                                <li key={index}>
+                                    <strong>Start:</strong> {new Date(entry.start_date).toLocaleString()} <br />
+                                    <strong>End:</strong> {new Date(entry.end_date).toLocaleString()} <br />
+                                    <strong>Duration:</strong> {(new Date(entry.end_date) - new Date(entry.start_date)) / 60000} minutes
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
             </div>
             <div className="diary-bottom">
                 <div className="diary-bottom-text">

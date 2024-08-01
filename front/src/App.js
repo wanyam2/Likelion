@@ -1,4 +1,3 @@
-// App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
@@ -13,16 +12,17 @@ import StartPage from './components/start/StartPage';
 import KakaoLoginButton from './components/start/KakaoLoginButton';
 import KakaoRedirectHandler from './components/start/KakaoRedirectHandler';
 
-// 상태 관리 라이브러리를 사용할 수도 있습니다.
 const App = () => {
     const [userId, setUserId] = useState(null);
     const [entries, setEntries] = useState([]);
+    const [sleepData, setSleepData] = useState([]);
+    const [errorMessage, setErrorMessage] = useState(null);
 
-    // 유저 정보 요청 후 상태 업데이트 (예: 로그인 후)
+    // 유저 정보 요청 후 상태 업데이트
     const fetchUserData = async () => {
         try {
-            const response = await axios.get('/api/user/info'); // 유저 정보 가져오기
-            setUserId(response.data.userId); // 유저 ID 저장
+            const response = await axios.get('/api/user/info');
+            setUserId(response.data.userId);
         } catch (error) {
             console.error('Failed to fetch user info:', error);
         }
@@ -36,7 +36,7 @@ const App = () => {
                     const response = await axios.get(`/api/diary/entries`, {
                         params: { userId },
                     });
-                    setEntries(response.data.entries); // Diary entries 저장
+                    setEntries(response.data.entries);
                 } catch (error) {
                     console.error('Failed to fetch diary entries:', error);
                 }
@@ -46,6 +46,25 @@ const App = () => {
         fetchDiaryEntries();
     }, [userId]);
 
+    // 수면 데이터 가져오기
+    useEffect(() => {
+        const fetchSleepData = async () => {
+            if (userId) {
+                try {
+                    const response = await axios.get(`/api/sleep-data/`, {
+                        params: { user_id: userId },
+                    });
+                    setSleepData(response.data);
+                } catch (error) {
+                    setErrorMessage('Failed to fetch sleep data');
+                    console.error('Failed to fetch sleep data:', error);
+                }
+            }
+        };
+
+        fetchSleepData();
+    }, [userId]);
+
     return (
         <Router>
             <Routes>
@@ -53,7 +72,7 @@ const App = () => {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/main" element={<MainPage />} />
                 <Route path="/more" element={<MoreMenu />} />
-                <Route path="/diary" element={<DiaryPage />} />
+                <Route path="/diary" element={<DiaryPage sleepData={sleepData} />} />
                 <Route path="/check-diary" element={<CheckDiary />} />
                 <Route path="/storage" element={<Storage entries={entries} />} />
                 <Route path="/settings" element={<SettingPage />} />
