@@ -30,9 +30,10 @@ const KakaoLoginButton = () => {
     };
 
     return (
-        <div className="login-option kakao" onClick={handleLogin}>
-            <span className="icon">K</span>
-            <span className="text">카카오 로그인</span>
+        <div className="log" onClick={handleLogin}>
+        <img src="/kakao.png" />
+            {/* <span className="icon">K</span> */}
+            {/* <span className="text">카카오 로그인</span> */}
         </div>
     );
 };
