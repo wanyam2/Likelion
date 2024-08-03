@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SettingPage.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-function App() {
+function SettingPage() {
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
@@ -10,6 +12,12 @@ function App() {
         alarm: '',
         eyeMode: false,
     });
+
+    const navigate = useNavigate(); // useNavigate로 대체
+
+    useEffect(() => {
+        // 이 부분에서는 초기 데이터를 로드하거나 다른 필요한 작업을 수행할 수 있습니다.
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -24,6 +32,21 @@ function App() {
             ...prevData,
             [field]: !prevData[field],
         }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.post('http://localhost:8000/settings/', formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            alert('설정이 저장되었습니다.');
+            navigate('/'); // 설정 후 홈 페이지로 이동
+        } catch (error) {
+            alert('저장에 실패했습니다.');
+        }
     };
 
     const handleAccountChange = () => {
@@ -44,7 +67,7 @@ function App() {
                 <div className="header">
                     <h1>내 설정</h1>
                 </div>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <label>
                         이름
                         <input
@@ -129,10 +152,11 @@ function App() {
                     </label>
                     <button type="button" onClick={handleAccountChange}>연동된 계정 수정</button>
                     <button type="button" onClick={handleInfoChange}>내 정보 수정</button>
+                    <button type="submit">저장</button>
                 </form>
             </div>
         </div>
     );
 }
 
-export default App;
+export default SettingPage; // 컴포넌트 이름을 맞추어 export

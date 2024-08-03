@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './RegisterPage.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // 추가
 
 function RegisterPage() {
     const [formData, setFormData] = useState({
@@ -7,6 +9,8 @@ function RegisterPage() {
         phone: '',
         termsAccepted: false,
     });
+
+    const navigate = useNavigate(); // 추가
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -23,13 +27,28 @@ function RegisterPage() {
         }));
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.post('http://localhost:8000/users/', formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            alert('회원 등록이 완료되었습니다.');
+            navigate('/settings'); // 페이지 이동 추가
+        } catch (error) {
+            alert('등록에 실패했습니다.');
+        }
+    };
+
     return (
         <div className="App">
             <div className="container">
                 <div className="header">
                     <h1>회원등록</h1>
                 </div>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <label>
                         이름
                         <input
@@ -65,6 +84,7 @@ function RegisterPage() {
                         />
                         <label>전체 동의하시겠습니까?</label>
                     </div>
+                    <button type="submit">등록</button>
                 </form>
             </div>
         </div>
