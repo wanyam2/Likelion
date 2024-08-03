@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const KakaoRedirectHandler = () => {
     const navigate = useNavigate();
+    const fetched = useRef(false);
 
     useEffect(() => {
         const handleCallback = async () => {
+            if (fetched.current) return;
+            fetched.current = true;
             const queryParams = new URLSearchParams(window.location.search);
             const code = queryParams.get('code');
 
@@ -17,7 +20,7 @@ const KakaoRedirectHandler = () => {
             }
 
             try {
-                const response = await axios.get(`http://15.164.76.9:8000/kakao/login`, {
+                const response = await axios.get(`http://15.164.76.9:8000/kakao/login/callback/`, {
                     params: { code }
                 });
 
@@ -36,7 +39,7 @@ const KakaoRedirectHandler = () => {
         };
 
         handleCallback();
-    }, [navigate]);
+    }, []);
 
     return <div>Loading...</div>;
 };
