@@ -30,7 +30,7 @@ const KakaoRedirectHandler = () => {
                 if (redirect_url) {
                     navigate(redirect_url); // RegisterPage로 이동
                 } else {
-                    navigate('/home'); // 기본 페이지로 이동
+                    navigate('/main'); // 기본 페이지로 이동
                 }
             } catch (error) {
                 console.error('Error handling Kakao callback:', error);

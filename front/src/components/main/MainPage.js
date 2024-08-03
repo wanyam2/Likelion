@@ -39,14 +39,14 @@ const MainPage = () => {
         <div className="main-container">
             <header className="header">
                 <div className="header-text">갓생일기</div>
-                <img
+                <div
                     className="header-logo"
-                    width="39"
-                    height="20"
-                    src="/Vector10_71.png"
-                    alt="Menu"
                     onClick={handleLogoClick}
-                />
+                >
+                    <div className="burger-icon"></div>
+                    <div className="burger-icon"></div>
+                    <div className="burger-icon"></div>
+                </div>
             </header>
 
             <div className="greeting-box">

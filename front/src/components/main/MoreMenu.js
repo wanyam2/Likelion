@@ -19,14 +19,14 @@ const MoreMenu = () => {
             <div className={`blue-light-filter ${blueLight ? 'active' : ''}`} />
             <header className="header">
                 <div className="header-text">갓생일기</div>
-                <img
+                <div
                     className="header-logo"
-                    width="39"
-                    height="20"
-                    src="/Vector10_103.png"
-                    alt="Go to MainPage"
                     onClick={goToMainPage} // 클릭 시 MainPage로 이동
-                />
+                >
+                    <div className="burger-icon"></div>
+                    <div className="burger-icon"></div>
+                    <div className="burger-icon"></div>
+                </div>
             </header>
             <div className="menu-content">
                 <div className="menu-item switch" onClick={toggleBlueLight}>
