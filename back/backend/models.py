@@ -66,4 +66,6 @@ class DiaryEntry(models.Model):
     diary = models.ForeignKey(Diary, related_name="entries", on_delete=models.CASCADE)
     time = models.TimeField()
     content = models.TextField()
-    image = models.ImageField(upload_to="diary_images/", blank=True, null=True)
+    image = models.ImageField(
+        upload_to="diary_images/%y-%m-%d/%h/%m", blank=True, null=True
+    )

@@ -355,8 +355,11 @@ class DiaryEntryAPIView(APIView):
             "diary": diary.id,
             "time": datetime.now().time().strftime("%H:%M:%S"),
             "content": request.data.get("content"),
-            "image": request.data.get("image"),  # 이미지 파일 처리
         }
+
+        image_file = request.FILES.get("image")
+        if image_file:
+            entry_data["image"] = image_file
 
         serializer = DiaryEntrySerializer(data=entry_data)
         if serializer.is_valid():
