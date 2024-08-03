@@ -19,7 +19,7 @@ const StartPage = () => {
                     if (response.data.is_first_login) {
                         navigate('/register'); // 최초 로그인일 경우 RegisterPage로 이동
                     } else {
-                        navigate('/home'); // 그렇지 않으면 HomePage로 이동
+                        navigate('/main'); // 그렇지 않으면 HomePage로 이동
                     }
                 }
             })
