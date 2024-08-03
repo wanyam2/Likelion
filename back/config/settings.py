@@ -77,13 +77,18 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
+# 모든 호스트 허용
 CORS_ALLOW_CREDENTIALS = True
+
+# 쿠키가 cross-site HTTP 요청에 포함될 수 있다
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:8000",
 ]
 
+# 실제 요청에 허용되는 HTTP 동사 리스트
 CORS_ALLOW_METHODS = (
     "DELETE",
     "GET",
@@ -93,6 +98,20 @@ CORS_ALLOW_METHODS = (
     "PUT",
 )
 
+# 실제 요청을 할 때 사용될 수 있는 npn-started HTTP 헤더 목록// 현
+CORS_ALLOW_HEADERS = ( 
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+)
+
+APPEND_SLASH = False #<- / 관련 에러 제거
 
 ROOT_URLCONF = "config.urls"
 
