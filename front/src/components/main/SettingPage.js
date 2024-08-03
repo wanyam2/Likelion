@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './SettingPage.css';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import './SettingPage.css';
 
 function SettingPage() {
     const [formData, setFormData] = useState({
@@ -41,6 +41,10 @@ function SettingPage() {
         } catch (error) {
             alert('스마트워치 연결에 실패했습니다.');
         }
+    };
+
+    const handleSubmit = () => {
+        navigate('/diary', { state: { alarm: formData.alarm } });
     };
 
     return (
@@ -105,7 +109,7 @@ function SettingPage() {
                     <label>
                         알람 시간(간격) 및 어플
                         <input
-                            type="text"
+                            type="time"
                             name="alarm"
                             value={formData.alarm}
                             onChange={handleChange}
@@ -134,10 +138,13 @@ function SettingPage() {
                     </label>
                     <button type="button" onClick={() => console.log('연동된 계정 수정 클릭')}>연동된 계정 수정</button>
                     <button type="button" onClick={() => console.log('내 정보 수정 클릭')}>내 정보 수정</button>
+                    <button type="button" onClick={handleSubmit}>
+                        Diary에 알람 시간 기록하기
+                    </button>
                 </form>
             </div>
         </div>
     );
 }
 
-export default SettingPage; // 컴포넌트 이름에 맞추어 export
+export default SettingPage;

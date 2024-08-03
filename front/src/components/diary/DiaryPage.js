@@ -1,9 +1,7 @@
-// src/components/diary/DiaryPage.js
-
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import './DiaryPage.css'; // CSS 파일을 별도로 관리합니다.
+import './DiaryPage.css';
 
 const formatDate = (date) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
@@ -12,21 +10,22 @@ const formatDate = (date) => {
 
 const DiaryPage = () => {
     const navigate = useNavigate();
-    const [text, setText] = useState(''); // 현재 입력된 글
-    const [media, setMedia] = useState(null); // 현재 입력된 이미지 또는 비디오
-    const [savedEntries, setSavedEntries] = useState([]); // 저장된 글과 미디어 목록
-    const [isChanged, setIsChanged] = useState(false); // 변경 여부 확인
-    const [sleepData, setSleepData] = useState([]); // 수면 데이터
+    const location = useLocation();
+    const [text, setText] = useState('');
+    const [media, setMedia] = useState(null);
+    const [savedEntries, setSavedEntries] = useState([]);
+    const [isChanged, setIsChanged] = useState(false);
+    const [sleepData, setSleepData] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
 
-    // 수면 데이터 가져오기
+    // 상태에서 알람 시간을 읽어옵니다.
+    const { alarm } = location.state || {};
+
     useEffect(() => {
         const fetchSleepData = async () => {
-            const userId = localStorage.getItem('userId'); // 사용자 ID를 가져옵니다.
+            const userId = localStorage.getItem('userId');
             try {
-                const response = await axios.get('/api/sleep-data/', {
-                    params: { user_id: userId },
-                });
+                const response = await axios.get('/api/sleep-data/', { params: { user_id: userId } });
                 setSleepData(response.data);
             } catch (error) {
                 setErrorMessage('수면 데이터를 불러오는 데 실패했습니다. 나중에 다시 시도해주세요.');
@@ -45,7 +44,7 @@ const DiaryPage = () => {
     const handleMediaChange = (e) => {
         if (e.target.files[0]) {
             const file = e.target.files[0];
-            setMedia(file); // 파일 객체를 저장합니다.
+            setMedia(file);
             setIsChanged(true);
         }
     };
@@ -53,32 +52,29 @@ const DiaryPage = () => {
     const handleSave = () => {
         if (text.trim() || media) {
             setSavedEntries([...savedEntries, { text, media, date: new Date() }]);
-            setText(''); // 텍스트를 비웁니다.
-            setMedia(null); // 미디어를 비웁니다.
-            setIsChanged(false); // 변경 사항 초기화
+            setText('');
+            setMedia(null);
+            setIsChanged(false);
         }
     };
 
     const handleSubmit = async () => {
         if (text.trim() || media) {
-            const userId = localStorage.getItem('userId'); // 사용자 ID를 가져옵니다.
+            const userId = localStorage.getItem('userId');
             const formData = new FormData();
             formData.append('text', text);
-            formData.append('media', media); // media는 파일 객체입니다.
-            formData.append('date', new Date().toISOString().split('T')[0]); // 날짜를 YYYY-MM-DD 형식으로 저장
+            formData.append('media', media);
+            formData.append('date', new Date().toISOString().split('T')[0]);
 
             try {
-                const response = await axios.post('/api/diary/entry/', formData, {
+                await axios.post('/api/diary/entry/', formData, {
                     params: { userId },
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
+                    headers: { 'Content-Type': 'multipart/form-data' },
                 });
-                console.log('Diary entry created:', response.data);
                 setSavedEntries([...savedEntries, { text, media, date: new Date() }]);
-                setText(''); // 텍스트를 비웁니다.
-                setMedia(null); // 미디어를 비웁니다.
-                setIsChanged(false); // 변경 사항 초기화
+                setText('');
+                setMedia(null);
+                setIsChanged(false);
                 alert('제출되었습니다!');
             } catch (error) {
                 console.error('Failed to create diary entry:', error);
@@ -91,16 +87,20 @@ const DiaryPage = () => {
         if (isChanged) {
             if (window.confirm('변경 사항이 있습니다. 저장하시겠습니까?')) {
                 handleSave();
-                navigate('/main'); // 변경 사항 저장 후 메인 페이지로 이동
+                navigate('/main');
             } else if (window.confirm('저장하지 않고 이동하시겠습니까?')) {
-                navigate('/main'); // 변경 사항 저장하지 않고 메인 페이지로 이동
-            } else {
-                // 취소 버튼을 눌렀을 때 아무 동작도 하지 않음
+                navigate('/main');
             }
         } else {
-            navigate('/main'); // 변경 사항이 없을 때 바로 메인 페이지로 이동
+            navigate('/main');
         }
     };
+
+    useEffect(() => {
+        if (alarm) {
+            setText(`알람 시간 설정: ${alarm}`);
+        }
+    }, [alarm]);
 
     const now = new Date();
     const formattedDate = formatDate(now);
@@ -186,9 +186,7 @@ const DiaryPage = () => {
                 {errorMessage && <p className="error-message">{errorMessage}</p>}
             </div>
             <div className="diary-bottom">
-                <div className="diary-bottom-text">
-                    오늘의 나는 어떠했나요?
-                </div>
+                <div className="diary-bottom-text">오늘의 나는 어떠했나요?</div>
             </div>
         </div>
     );
