@@ -147,7 +147,6 @@
     }
 }
 
-/* 기본적으로 블루라이트 필터를 숨김 */
 .blue-light-filter {
     position: fixed;
     top: 0;
@@ -164,3 +163,4 @@
 .blue-light-filter.active {
     opacity: 1;
 }
+

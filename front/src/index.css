@@ -1,3 +1,4 @@
+/* src/index.css */
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +11,25 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+body.blue-light-mode {
+    background-color: rgba(255, 223, 155, 0.6); /* 블루 라이트 필터 */
+}
+
+.blue-light-filter {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 223, 155, 0.6); /* 약간 노란색 필터 */
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none; /* 필터가 클릭되지 않도록 함 */
+    z-index: 1000; /* 필터가 다른 콘텐츠 위에 표시되도록 설정 */
+}
+
+.blue-light-filter.active {
+    opacity: 1;
 }

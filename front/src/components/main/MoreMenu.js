@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // useNavigate를 import
-import './MoreMenu.css'; // CSS 파일을 import
+// src/components/main/MoreMenu.js
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useBlueLight } from '../../contexts/BlueLightContext'; // Context 훅 import
+import './MoreMenu.css';
 
 const MoreMenu = () => {
-    const [blueLight, setBlueLight] = useState(false);
-    const navigate = useNavigate(); // useNavigate 훅을 사용하여 페이지 이동
-
-    const toggleBlueLight = () => {
-        setBlueLight(prevState => !prevState);
-    };
+    const { blueLight, toggleBlueLight } = useBlueLight(); // Context 사용
+    const navigate = useNavigate();
 
     const goToMainPage = () => {
-        navigate('/main'); // MainPage로 이동
+        navigate('/main');
     };
 
     return (
@@ -21,7 +19,7 @@ const MoreMenu = () => {
                 <div className="header-text">갓생일기</div>
                 <div
                     className="header-logo"
-                    onClick={goToMainPage} // 클릭 시 MainPage로 이동
+                    onClick={goToMainPage}
                 >
                     <div className="burger-icon"></div>
                     <div className="burger-icon"></div>
