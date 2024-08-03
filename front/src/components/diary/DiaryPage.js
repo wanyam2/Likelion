@@ -1,3 +1,5 @@
+// src/components/diary/DiaryPage.js
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -27,7 +29,7 @@ const DiaryPage = () => {
                 });
                 setSleepData(response.data);
             } catch (error) {
-                setErrorMessage('Failed to fetch sleep data');
+                setErrorMessage('수면 데이터를 불러오는 데 실패했습니다. 나중에 다시 시도해주세요.');
                 console.error('Failed to fetch sleep data:', error);
             }
         };
