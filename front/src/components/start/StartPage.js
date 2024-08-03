@@ -38,15 +38,15 @@ const StartPage = () => {
                     <div>기</div>
                 </div>
                 <div className="login-options">
-                    <div className="login-option google" onClick={() => handleClick('google')}>
+                    {/* <div className="login-option google" onClick={() => handleClick('google')}>
                         <span className="icon">G</span>
                         <span className="text">구글 로그인</span>
-                    </div>
+                    </div> */}
                     <KakaoLoginButton /> {/* KakaoLoginButton 컴포넌트를 사용 */}
-                    <div className="login-option naver" onClick={() => handleClick('naver')}>
+                    {/* <div className="login-option naver" onClick={() => handleClick('naver')}>
                         <span className="icon">N</span>
                         <span className="text">네이버 로그인</span>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
