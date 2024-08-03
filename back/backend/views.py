@@ -12,15 +12,16 @@ from rest_framework_simplejwt.serializers import (
 )
 from rest_framework.permissions import IsAuthenticated
 from .kakao_provider import KakaoProvider
-from .models import User, Diary, DiaryEntry
+from .models import User, UserSetting, Diary, DiaryEntry
 from .serializers import (
     UserSerializer,
+    UserSettingSerializer,
     RegisterUserSerializer,
     DiarySerializer,
     DiaryEntrySerializer,
 )
 from config import settings
-from datetime import date, datetime
+from datetime import datetime
 
 default_auth_url = "https://kauth.kakao.com/oauth/authorize"
 kakao_redirect_url = "http://localhost:3000/kakao/callback"
@@ -177,71 +178,80 @@ class RegisterAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class DiaryAPIView(APIView):
-#     def get(self, request):
-#         userid = request.query_params.get("userid")
-#         date = request.query_params.get("date")
+class UserSettingAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        userid = request.query_params.get("userid")
+        if not userid:
+            return Response(
+                {"detail": "유저ID를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
-#         if not userid:
-#             return Response(
-#                 {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
-#             )
+        try:
+            user = User.objects.get(id=userid)
+        except User.DoesNotExist:
+            return Response(
+                {"detail": "유저를 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
+            )
 
-#         if date:
-#             try:
-#                 diary = Diary.objects.get(userid=userid, date=date)
-#             except Diary.DoesNotExist:
-#                 return Response(
-#                     {"error": "Diary not found for the given date"},
-#                     status=status.HTTP_404_NOT_FOUND,
-#                 )
-#         else:
-#             diaries = Diary.objects.filter(userid=userid)
-#             if not diaries.exists():
-#                 return Response(
-#                     {"error": "No diaries found for the given user"},
-#                     status=status.HTTP_404_NOT_FOUND,
-#                 )
-#             serializer = DiarySerializer(diaries, many=True)
-#             return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            settings = UserSetting.objects.get(user=user)
+        except UserSetting.DoesNotExist:
+            return Response(
+                {"detail": "설정을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
+            )
 
-#         serializer = DiarySerializer(diary)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = UserSettingSerializer(settings)
+        return Response(serializer.data)
 
-#     def post(self, request):
-#         serializer = DiarySerializer(data=request.data)
-#         if serializer.is_valid():
-#             diary = serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def post(self, request, *args, **kwargs):
+        userid = request.query_params.get("userid")
+        if not userid:
+            return Response(
+                {"detail": "유저ID를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = User.objects.get(id=userid)
+        except User.DoesNotExist:
+            return Response(
+                {"detail": "유저를 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
+            )
 
-#     def put(self, request):
-#         userid = request.query_params.get("userid")
+        serializer = UserSettingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#         if not userid:
-#             return Response(
-#                 {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
-#             )
+    def put(self, request, *args, **kwargs):
+        userid = request.query_params.get("userid")
+        if not userid:
+            return Response(
+                {"detail": "유저ID를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
-#         try:
-#             date = datetime.now().date()
-#             diary = Diary.objects.get(userid=userid, date=date)
-#         except Diary.DoesNotExist:
-#             return Response(
-#                 {"error": "Diary not found"}, status=status.HTTP_404_NOT_FOUND
-#             )
+        try:
+            user = User.objects.get(id=userid)
+        except User.DoesNotExist:
+            return Response(
+                {"detail": "유저를 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
+            )
 
-#         serializer = DiarySerializer(diary, data=request.data)
-#         if serializer.is_valid():
-#             diary = serializer.save()
-#             return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            settings = UserSetting.objects.get(user=user)
+        except UserSetting.DoesNotExist:
+            return Response(
+                {"detail": "설정을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
+            )
 
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = UserSettingSerializer(settings, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DiaryAPIView(APIView):
-    # permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         userid = request.query_params.get("userid")
@@ -312,7 +322,6 @@ class DiaryAPIView(APIView):
 
 
 class DiaryEntryAPIView(APIView):
-    # permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         userid = request.query_params.get("userid")

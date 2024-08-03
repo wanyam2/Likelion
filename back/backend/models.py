@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
@@ -43,11 +44,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class UserSetting(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="settings")
+    alarmtime = models.TimeField(null=True)
+    appname = models.TextField()
     eyemode = models.BooleanField()
     watchmode = models.BooleanField()
-    alarmtime = models.TimeField(null=True)
-    appname = models.CharField(max_length=256)
 
 
 class Diary(models.Model):

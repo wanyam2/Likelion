@@ -24,6 +24,7 @@ from django.urls import path, include
 from backend.views import (
     AuthAPIView,
     RegisterAPIView,
+    UserSettingAPIView,
     DiaryAPIView,
     DiaryEntryAPIView,
     KakaoLogin,
@@ -34,8 +35,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/login/", AuthAPIView.as_view(), name="login"),
     path("auth/register/", RegisterAPIView.as_view(), name="register"),
+    path("setting/", UserSettingAPIView.as_view(), name="user-setting"),
     path("diary/", DiaryAPIView.as_view(), name="diary"),
-    path("diary-entry/", DiaryEntryAPIView.as_view(), name="diary"),
+    path("diary-entry/", DiaryEntryAPIView.as_view(), name="diary_entry"),
     path("kakao/login/callback/", KakaoLogin.as_view(), name="kakao_login"),
     path("kakao/auth/url/", KakaoPublishURI.as_view()),
     path("accounts/", include("allauth.urls")),
