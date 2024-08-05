@@ -1,7 +1,7 @@
 // src/components/main/MoreMenu.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useBlueLight } from '../../contexts/BlueLightContext'; // Context 훅 import
+import { useBlueLight } from '../contexts/BlueLightContext'; // Context 훅 import
 import './MoreMenu.css';
 
 const MoreMenu = () => {

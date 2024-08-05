@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './DiaryPage.css';
 
+// 날짜 포맷 함수
 const formatDate = (date) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
     return new Intl.DateTimeFormat('ko-KR', options).format(date);
@@ -20,6 +21,7 @@ const DiaryPage = () => {
 
     const { alarm } = location.state || {};
 
+    // 수면 데이터 로드
     useEffect(() => {
         const fetchSleepData = async () => {
             const userId = localStorage.getItem('userId');
@@ -35,11 +37,31 @@ const DiaryPage = () => {
         fetchSleepData();
     }, []);
 
+    // 알림 데이터 처리
+    useEffect(() => {
+        if (alarm) {
+            setText(`알람 시간 설정: ${alarm}`);
+        }
+    }, [alarm]);
+
+    // 미디어 URL 관리
+    useEffect(() => {
+        let mediaUrl;
+        if (media) {
+            mediaUrl = URL.createObjectURL(media);
+        }
+        return () => {
+            if (mediaUrl) URL.revokeObjectURL(mediaUrl);
+        };
+    }, [media]);
+
+    // 텍스트 변경 핸들러
     const handleTextChange = (e) => {
         setText(e.target.value);
         setIsChanged(true);
     };
 
+    // 미디어 변경 핸들러
     const handleMediaChange = (e) => {
         if (e.target.files[0]) {
             const file = e.target.files[0];
@@ -48,6 +70,7 @@ const DiaryPage = () => {
         }
     };
 
+    // 임시 저장 핸들러
     const handleSave = () => {
         if (text.trim() || media) {
             setSavedEntries((prevEntries) => [
@@ -60,6 +83,7 @@ const DiaryPage = () => {
         }
     };
 
+    // 제출 핸들러
     const handleSubmit = async () => {
         if (text.trim() || media) {
             const userId = localStorage.getItem('userId');
@@ -88,6 +112,7 @@ const DiaryPage = () => {
         }
     };
 
+    // 뒤로가기 핸들러
     const handleBack = () => {
         if (isChanged) {
             if (window.confirm('변경 사항이 있습니다. 저장하시겠습니까?')) {
@@ -100,18 +125,6 @@ const DiaryPage = () => {
             navigate('/main');
         }
     };
-
-    useEffect(() => {
-        if (alarm) {
-            setText(`알람 시간 설정: ${alarm}`);
-        }
-    }, [alarm]);
-
-    useEffect(() => {
-        return () => {
-            if (media) URL.revokeObjectURL(URL.createObjectURL(media));
-        };
-    }, [media]);
 
     const now = new Date();
     const formattedDate = formatDate(now);
@@ -178,7 +191,9 @@ const DiaryPage = () => {
                                 <p className="diary-saved-date">{formatDate(entry.date)}</p>
                             </div>
                         ))
-                    ) : null}
+                    ) : (
+                        <p>저장된 항목이 없습니다.</p>
+                    )}
                 </div>
                 {sleepData.length > 0 && (
                     <div className="diary-sleep-data">

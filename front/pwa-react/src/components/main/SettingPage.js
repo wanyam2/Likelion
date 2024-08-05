@@ -43,8 +43,19 @@ function SettingPage() {
         }
     };
 
-    const handleSubmit = () => {
-        navigate('/diary', { state: { alarm: formData.alarm } });
+    const handleSubmit = async () => {
+        try {
+            // 알람 시간을 서버에 저장
+            await axios.post('http://localhost:8000/api/set-alarm/', {
+                alarm_time: formData.alarm,
+            });
+
+            // Diary 페이지로 이동하면서 알람 시간을 상태로 전달
+            navigate('/diary', { state: { alarm: formData.alarm } });
+        } catch (error) {
+            console.error('Failed to save alarm time:', error);
+            alert('알람 시간을 저장하는 데 실패했습니다. 다시 시도해주세요.');
+        }
     };
 
     return (

@@ -1,7 +1,8 @@
 // src/App.js
+
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { BlueLightProvider, useBlueLight } from './contexts/BlueLightContext';
+import { BlueLightProvider, useBlueLight } from './components/contexts/BlueLightContext';
 import MainPage from './components/main/MainPage';
 import MoreMenu from './components/main/MoreMenu';
 import DiaryPage from './components/diary/DiaryPage';
@@ -20,6 +21,18 @@ const AppContent = () => {
     useEffect(() => {
         document.body.classList.toggle('blue-light-mode', blueLight);
     }, [blueLight]);
+
+    useEffect(() => {
+        if ('Notification' in window) {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                } else {
+                    console.log('Notification permission denied.');
+                }
+            });
+        }
+    }, []);
 
     return (
         <Router>

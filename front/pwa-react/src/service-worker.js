@@ -63,10 +63,24 @@ registerRoute(
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
+// public/service-worker.js
+
+self.addEventListener('push', function(event) {
+    const data = event.data.json();
+    self.registration.showNotification(data.title, {
+        body: data.body,
+        icon: 'path/to/icon.png',
+        data: data.url // 알림을 클릭했을 때 열 URL
+    });
 });
+
+self.addEventListener('notificationclick', function(event) {
+    const url = event.notification.data;
+    event.notification.close();
+    event.waitUntil(
+        clients.openWindow(url) // 알림 클릭 시 해당 URL 열기
+    );
+});
+
 
 // Any other custom service worker logic can go here.
