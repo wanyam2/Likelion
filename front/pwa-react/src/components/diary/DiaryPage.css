@@ -311,7 +311,6 @@
 
 /* 기존 스타일 유지 */
 
-/* 에러 메시지 스타일 */
 .error-message {
     background-color: #f8d7da;
     color: #721c24;
@@ -324,7 +323,9 @@
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
+    white-space: pre-line; /* 줄 바꿈을 유지합니다. */
 }
+
 
 /* 에러 메시지의 아이콘 */
 .error-message::before {

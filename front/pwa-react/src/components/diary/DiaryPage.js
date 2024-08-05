@@ -18,7 +18,6 @@ const DiaryPage = () => {
     const [sleepData, setSleepData] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
 
-    // 상태에서 알람 시간을 읽어옵니다.
     const { alarm } = location.state || {};
 
     useEffect(() => {
@@ -51,7 +50,10 @@ const DiaryPage = () => {
 
     const handleSave = () => {
         if (text.trim() || media) {
-            setSavedEntries([...savedEntries, { text, media, date: new Date() }]);
+            setSavedEntries((prevEntries) => [
+                ...prevEntries,
+                { text, media, date: new Date() },
+            ]);
             setText('');
             setMedia(null);
             setIsChanged(false);
@@ -71,7 +73,10 @@ const DiaryPage = () => {
                     params: { userId },
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
-                setSavedEntries([...savedEntries, { text, media, date: new Date() }]);
+                setSavedEntries((prevEntries) => [
+                    ...prevEntries,
+                    { text, media, date: new Date() },
+                ]);
                 setText('');
                 setMedia(null);
                 setIsChanged(false);
@@ -101,6 +106,12 @@ const DiaryPage = () => {
             setText(`알람 시간 설정: ${alarm}`);
         }
     }, [alarm]);
+
+    useEffect(() => {
+        return () => {
+            if (media) URL.revokeObjectURL(URL.createObjectURL(media));
+        };
+    }, [media]);
 
     const now = new Date();
     const formattedDate = formatDate(now);
