@@ -84,27 +84,24 @@ class AuthAPIView(APIView):
         try:
             access = request.data.get("access")
             payload = jwt.decode(access, settings.SECRET_KEY, algorithms=["HS256"])
-            pk = payload.get("id")
+            pk = payload.get("user_id")
             user = get_object_or_404(User, pk=pk)
             serializer = UserSerializer(instance=user)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         except jwt.exceptions.ExpiredSignatureError:
             # 토큰 만료시 갱신
-            refresh_token = request.COOKIES.get("refresh", None)
+            refresh_token = request.data.get("refresh", None)
             serializer = TokenRefreshSerializer(data={"refresh": refresh_token})
             try:
                 if serializer.is_valid(raise_exception=True):
                     access = serializer.validated_data.get("access", None)
                     refresh = serializer.validated_data.get("refresh", None)
                     payload = jwt.decode(access, SECRET_KEY, algorithms=["HS256"])
-                    pk = payload.get("id")
+                    pk = payload.get("user_id")
                     user = get_object_or_404(User, pk=pk)
                     serializer = UserSerializer(instance=user)
-                    res = Response(serializer.data, status=status.HTTP_200_OK)
-                    res.set_cookie("access", access)
-                    res.set_cookie("refresh", refresh)
-                    return res
+                    return Response(serializer.data, status=status.HTTP_200_OK)
                 raise jwt.exceptions.InvalidTokenError
             except (TokenBackendError, TokenError):
                 return Response(
@@ -136,8 +133,7 @@ class AuthAPIView(APIView):
                 },
                 status=status.HTTP_200_OK,
             )
-            res.set_cookie("access", access_token)
-            res.set_cookie("refresh", refresh_token)
+
             return res
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -146,8 +142,7 @@ class AuthAPIView(APIView):
         response = Response(
             {"message": "Logout success"}, status=status.HTTP_202_ACCEPTED
         )
-        response.delete_cookie("access")
-        response.delete_cookie("refresh")
+
         return response
 
 
