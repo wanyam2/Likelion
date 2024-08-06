@@ -1,4 +1,3 @@
-/* MoreMenu.css */
 .more-menu-container {
     position: relative;
     width: 100%;
@@ -33,7 +32,6 @@
     cursor: pointer;
 }
 
-/* 메뉴 내용 */
 .menu-content {
     margin-top: 102px; /* 헤더 높이만큼 여백 조정 */
     padding: 20px;
@@ -44,66 +42,15 @@
 
 /* 메뉴 아이템 */
 .menu-item {
-    width: calc(100% - 40px); /* 전체 너비에서 좌우 여백 제거 */
-    margin: 10px auto; /* 자동으로 중앙 정렬 */
+    margin: 10px 0;
     padding: 10px;
-    background-color: #1a2c5c; /* 파란색 배경 */
-    color: #f3f6ff; /* 흰색 텍스트 */
+    background-color: #1a2c5c;
+    color: #f3f6ff;
     font-size: 16px;
     font-weight: bold;
     border-radius: 3px;
     cursor: pointer;
     text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* 텍스트를 정중앙에 위치 */
-}
-
-/* 스위치 컨테이너 */
-.switch-container {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* 중앙 정렬 */
-    cursor: pointer;
-}
-
-/* 스위치 */
-.switch {
-    width: 50px;
-    height: 24px;
-    background-color: #ccc;
-    border-radius: 12px;
-    position: relative;
-    transition: background-color 0.3s;
-    margin-left: 10px; /* 스위치와 텍스트 사이의 간격 */
-}
-
-/* 스위치 안쪽 원 */
-.switch::before {
-    content: '';
-    width: 20px;
-    height: 20px;
-    background-color: #fff;
-    border-radius: 50%;
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    transition: transform 0.3s;
-}
-
-/* 스위치 활성화 상태 */
-.switch.active {
-    background-color: #1a2c5c;
-}
-
-.switch.active::before {
-    transform: translateX(26px);
-}
-
-/* 스위치 텍스트 */
-.switch-text {
-    font-size: 16px;
-    color: #f3f6ff; /* 흰색 텍스트 */
 }
 
 /* 미디어 쿼리 */
@@ -147,6 +94,69 @@
     }
 }
 
+/* 기본적으로 블루라이트 필터를 숨김 */
+.blue-light-filter {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 255, 0.2); /* 약간의 파란색 필터 */
+    display: none; /* 기본적으로 숨김 */
+    z-index: 5; /* 헤더 아래에 표시되도록 설정 */
+}
+
+/* 눈 보호 모드 활성화 시 */
+.blue-light-filter.active {
+    display: block;
+}
+
+.menu-item.switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* 스위치 컨테이너 */
+.switch-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* 스위치 */
+.switch {
+    width: 50px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 12px;
+    position: relative;
+    transition: background-color 0.3s;
+    margin-left: 10px; /* 스위치와 텍스트 사이의 간격 */
+}
+
+/* 스위치 안쪽 원 */
+.switch::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+}
+
+/* 스위치 활성화 상태 */
+.switch.active {
+    background-color: #1a2c5c;
+}
+
+.switch.active::before {
+    transform: translateX(26px);
+}
+
 .blue-light-filter {
     position: fixed;
     top: 0;
@@ -164,3 +174,8 @@
     opacity: 1;
 }
 
+/* 스위치 텍스트 */
+.switch-text {
+    font-size: 16px;
+    color: #1a2c5c;
+}
