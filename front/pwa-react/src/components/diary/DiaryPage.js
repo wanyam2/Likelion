@@ -12,7 +12,6 @@ const formatDate = (date) => {
     return new Intl.DateTimeFormat('ko-KR', options).format(date);
 };
 
-
 const DiaryPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -22,24 +21,40 @@ const DiaryPage = () => {
     const [isChanged, setIsChanged] = useState(false);
     const [sleepData, setSleepData] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
+    const [userId, setUserId] = useState(null); // 사용자 ID 상태 추가
 
     const { alarm } = location.state || {};
 
-    // 수면 데이터 로드
+    // 사용자 ID 로드
     useEffect(() => {
-        const fetchSleepData = async () => {
-            const userId = localStorage.getItem('userId');
+        const fetchUserId = async () => {
             try {
-                const response = await axios.get('/api/sleep-data/', { params: { user_id: userId } });
-                setSleepData(response.data);
+                const response = await axios.get('https://15.164.76.9:8000/auth/login');
+                setUserId(response.data.id);
             } catch (error) {
-                setErrorMessage('수면 데이터를 불러오는 데 실패했습니다. 나중에 다시 시도해주세요.');
-                console.error('Failed to fetch sleep data:', error);
+                setErrorMessage('사용자 ID를 불러오는 데 실패했습니다.');
+                console.error('Failed to fetch user ID:', error.response ? error.response.data : error.message);
             }
         };
-
-        fetchSleepData();
+        fetchUserId();
     }, []);
+
+    // 수면 데이터 로드
+    // useEffect(() => {
+    //     const fetchSleepData = async () => {
+    //         if (userId) {
+    //             try {
+    //                 const response = await axios.get('/api/sleep-data/', { params: { user_id: userId } });
+    //                 setSleepData(response.data);
+    //             } catch (error) {
+    //                 setErrorMessage('수면 데이터를 불러오는 데 실패했습니다. 나중에 다시 시도해주세요.');
+    //                 console.error('Failed to fetch sleep data:', error.response ? error.response.data : error.message);
+    //             }
+    //         }
+    //     };
+    //
+    //     fetchSleepData();
+    // }, [userId]);
 
     // 알림 데이터 처리
     useEffect(() => {
@@ -74,64 +89,53 @@ const DiaryPage = () => {
         }
     };
 
-    // 임시 저장 핸들러
-    const handleSave = () => {
-        if (text.trim() || media) {
-            const entry = { text, media, date: new Date() };
-            setSavedEntries((prevEntries) => [
-                ...prevEntries,
-                entry,
-            ]);
-            localStorage.setItem('diaryPageState', JSON.stringify({
-                text: text,
-                media: media ? URL.createObjectURL(media) : null,
-                savedEntries: [...savedEntries, entry],
-            }));
-            setText('');
-            setMedia(null);
-            setIsChanged(false);
-        }
-    };
-
     // 컴포넌트가 마운트될 때 localStorage에서 상태를 복원
     useEffect(() => {
         const savedState = localStorage.getItem('diaryPageState');
         if (savedState) {
-            const { text, media, savedEntries } = JSON.parse(savedState);
+            const { text, savedEntries } = JSON.parse(savedState);
             setText(text);
             setSavedEntries(savedEntries);
-            if (media) {
-                setMedia(media);  // 이전에 저장된 media URL을 복원
-            }
         }
     }, []);
 
     // 제출 핸들러
-    const handleSubmit = async () => {
+    const handleSave = async () => {
         if (text.trim() || media) {
-            const userId = localStorage.getItem('userId');
+            const response = await axios.get('https://15.164.76.9:8000/auth/login');
+            console.log(response);
+            setUserId(response.data.id);
+            console.log(userId);
+            if (!userId) {
+                setErrorMessage('사용자 ID를 가져올 수 없습니다.');
+                return;
+            }
+
             const formData = new FormData();
             formData.append('text', text);
             if (media) formData.append('media', media);
-            formData.append('date', new Date().toISOString().split('T')[0]);
+            formData.append('date', new Date().toISOString().split("T")[0]);  // ISO 형식으로 날짜를 전송
+            formData.append('userId', userId);  // 사용자 ID를 formData에 추가
 
             try {
-                await axios.post('/api/diary-entry/', formData, {
+                const response = await axios.post('https://15.164.76.9:8000/diary-entry/', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
+
+                console.log('Response:', response.data);
 
                 setSavedEntries((prevEntries) => [
                     ...prevEntries,
                     { text, media, date: new Date() },
                 ]);
-                localStorage.removeItem('diaryPageState');  // 성공적으로 제출 후 상태 삭제
+                localStorage.removeItem('diaryPageState');
                 setText('');
                 setMedia(null);
                 setIsChanged(false);
                 alert('제출되었습니다!');
             } catch (error) {
+                console.error('Failed to create diary entry:', error.response ? error.response.data : error.message);
                 setErrorMessage('제출에 실패했습니다. 다시 시도해주세요.');
-                console.error('Failed to create diary entry:', error);
             }
         }
     };
@@ -178,7 +182,7 @@ const DiaryPage = () => {
                     <textarea
                         className="diary-textarea"
                         value={text}
-                        onChange={handleTextChange}  // Ensure this function is defined
+                        onChange={handleTextChange}
                         placeholder="여기에 글을 작성하세요..."
                     />
                 </div>
@@ -190,11 +194,10 @@ const DiaryPage = () => {
                         id="media-upload"
                         type="file"
                         accept="image/*,video/*"
-                        onChange={handleMediaChange}  // Ensure this function is defined
+                        onChange={handleMediaChange}
                         className="diary-file-input"
                     />
-                    <button onClick={handleSave} className="diary-save-button">임시 저장</button>
-                    <button onClick={handleSubmit} className="diary-submit-button">제출</button>
+                    <button onClick={handleSave} className="diary-save-button">제출</button>
                 </div>
                 <div className="diary-saved-entries">
                     {savedEntries.length > 0 ? (
@@ -213,7 +216,7 @@ const DiaryPage = () => {
                                     </div>
                                 )}
                                 <p className="diary-saved-text">{entry.text}</p>
-                                <p className="diary-saved-date">{formatDate(entry.date)}</p>
+                                <p className="diary-saved-date">{formatDate(new Date(entry.date))}</p>
                             </div>
                         ))
                     ) : (

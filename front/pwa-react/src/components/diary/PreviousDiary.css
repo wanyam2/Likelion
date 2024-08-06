@@ -54,13 +54,6 @@
     white-space: nowrap; /* 제목이 줄바꿈되지 않도록 설정 */
 }
 
-/* 강조된 날짜 스타일 */
-.highlighted {
-    background: #1a2c5c;
-    color: white;
-    border-radius: 50%; /* 강조된 날짜를 원형으로 */
-}
-
 /* 모바일 화면을 위한 스타일 조정 */
 @media (max-width: 600px) {
     .arrow-button {

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const KakaoRedirectHandler = () => {
     const navigate = useNavigate();
@@ -26,13 +27,15 @@ const KakaoRedirectHandler = () => {
 
                 console.log('Kakao login response:', response.data);
 
-                const { redirect_url, isFirstLogin } = response.data;
+                const { access, refresh, isFirstLogin } = response.data;
+
+                Cookies.set('authaccess', access, { expires: 7 });
+                Cookies.set('authrefresh', refresh, { expires: 7 });
 
                 // 최초 로그인 여부에 따라 페이지 이동
                 if (isFirstLogin) {
                     navigate('/settings'); // 최초 로그인일 경우 Settings 페이지로 이동
-                } else if (redirect_url) {
-                    navigate(redirect_url); // 서버에서 제공한 URL로 이동
+
                 } else {
                     navigate('/main'); // 기본 페이지로 이동
                 }
