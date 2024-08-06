@@ -1,6 +1,7 @@
 // src/App.js
 
 import React, { useEffect } from 'react';
+import { ConfigProvider } from 'antd';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { BlueLightProvider, useBlueLight } from './components/contexts/BlueLightContext';
 import MainPage from './components/main/MainPage';
@@ -13,6 +14,7 @@ import SettingPage from './components/main/SettingPage';
 import StartPage from './components/start/StartPage';
 import KakaoLoginButton from './components/start/KakaoLoginButton';
 import KakaoRedirectHandler from './components/start/KakaoRedirectHandler';
+import LoginPage from './components/start/LoginPage';
 import './index.css'; // CSS 파일 import
 
 const AppContent = () => {
@@ -47,6 +49,8 @@ const AppContent = () => {
                 <Route path="/settings" element={<SettingPage />} />
                 <Route path="/kakao/callback" element={<KakaoRedirectHandler />} />
                 <Route path="/kakao-login" element={<KakaoLoginButton />} />
+                <Route path="/login" element={<LoginPage />} />
+
             </Routes>
         </Router>
     );
@@ -54,9 +58,12 @@ const AppContent = () => {
 
 function App() {
     return (
-        <BlueLightProvider>
-            <AppContent />
-        </BlueLightProvider>
+        <ConfigProvider>
+            <BlueLightProvider>
+                <AppContent />
+            </BlueLightProvider>
+        </ConfigProvider>
+
     );
 }
 

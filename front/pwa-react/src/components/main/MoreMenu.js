@@ -1,6 +1,7 @@
 // src/components/main/MoreMenu.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from "antd";
 import { useBlueLight } from '../contexts/BlueLightContext'; // Context 훅 import
 import './MoreMenu.css';
 
@@ -35,12 +36,13 @@ const MoreMenu = () => {
                         </span>
                     </div>
                 </div>
-                <div className="menu-item">내 정보</div>
-                <div className="menu-item">이벤트</div>
-                <div className="menu-item">고객센터</div>
-                <div className="menu-item">연동 계정 확인하기</div>
+                <Button type="primary" className="menu-item">내 정보</Button>
+                <Button type="primary" className="menu-item">고객센터</Button>
+                <Button type="primary" className="menu-item">연동 계정 확인하기</Button>
             </div>
         </div>
+
+        
     );
 };
 
