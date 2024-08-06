@@ -9,7 +9,7 @@ const StartPage = () => {
 
     const handleClick = (loginType) => {
         axios
-            .get('http://15.164.76.9:8000/login', {
+            .get('http://13.125.0.218:8000/login', {
                 params: { type: loginType }
             })
             .then(response => {

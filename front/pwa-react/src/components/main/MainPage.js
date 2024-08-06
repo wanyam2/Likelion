@@ -10,7 +10,7 @@ const MainPage = () => {
         // 사용자 정보를 가져오는 함수
         const fetchUserInfo = async () => {
             try {
-                const response = await fetch('/api/auth/', {
+                const response = await fetch('http://13.125.0.218:8000/api/auth/', {
                     headers: {
                         'Content-Type': 'application/json',
                     },

@@ -32,7 +32,7 @@ function SettingPage() {
 
     const handleWatchConnect = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/api/connect-watch/', {}, {
+            const response = await axios.post('http://13.125.0.218:8000/api/connect-watch/', {}, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
