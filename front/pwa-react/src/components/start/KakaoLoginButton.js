@@ -7,11 +7,10 @@ const KakaoLoginButton = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.get('http://15.164.76.9:8000/kakao/auth/url/');
+            const response = await axios.get('http://13.125.0.218:8000/kakao/auth/url/');
             const kakaoRedirectUri = response.data;
             console.log('Kakao login button clicked');
             console.log('Kakao Auth URL:', kakaoRedirectUri); // 로그를 통해 URL 확인
-
             // 카카오 로그인 페이지로 이동
             window.location.href = kakaoRedirectUri;
         } catch (error) {

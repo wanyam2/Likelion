@@ -5,9 +5,13 @@ import './DiaryPage.css';
 
 // 날짜 포맷 함수
 const formatDate = (date) => {
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+        return '유효하지 않은 날짜';  // 유효하지 않은 날짜 처리
+    }
     const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
     return new Intl.DateTimeFormat('ko-KR', options).format(date);
 };
+
 
 const DiaryPage = () => {
     const navigate = useNavigate();
@@ -73,15 +77,34 @@ const DiaryPage = () => {
     // 임시 저장 핸들러
     const handleSave = () => {
         if (text.trim() || media) {
+            const entry = { text, media, date: new Date() };
             setSavedEntries((prevEntries) => [
                 ...prevEntries,
-                { text, media, date: new Date() },
+                entry,
             ]);
+            localStorage.setItem('diaryPageState', JSON.stringify({
+                text: text,
+                media: media ? URL.createObjectURL(media) : null,
+                savedEntries: [...savedEntries, entry],
+            }));
             setText('');
             setMedia(null);
             setIsChanged(false);
         }
     };
+
+    // 컴포넌트가 마운트될 때 localStorage에서 상태를 복원
+    useEffect(() => {
+        const savedState = localStorage.getItem('diaryPageState');
+        if (savedState) {
+            const { text, media, savedEntries } = JSON.parse(savedState);
+            setText(text);
+            setSavedEntries(savedEntries);
+            if (media) {
+                setMedia(media);  // 이전에 저장된 media URL을 복원
+            }
+        }
+    }, []);
 
     // 제출 핸들러
     const handleSubmit = async () => {
@@ -89,25 +112,26 @@ const DiaryPage = () => {
             const userId = localStorage.getItem('userId');
             const formData = new FormData();
             formData.append('text', text);
-            formData.append('media', media);
+            if (media) formData.append('media', media);
             formData.append('date', new Date().toISOString().split('T')[0]);
 
             try {
-                await axios.post('/api/diary/entry/', formData, {
-                    params: { userId },
+                await axios.post('/api/diary-entry/', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
+
                 setSavedEntries((prevEntries) => [
                     ...prevEntries,
                     { text, media, date: new Date() },
                 ]);
+                localStorage.removeItem('diaryPageState');  // 성공적으로 제출 후 상태 삭제
                 setText('');
                 setMedia(null);
                 setIsChanged(false);
                 alert('제출되었습니다!');
             } catch (error) {
+                setErrorMessage('제출에 실패했습니다. 다시 시도해주세요.');
                 console.error('Failed to create diary entry:', error);
-                alert('제출에 실패했습니다. 다시 시도해주세요.');
             }
         }
     };
@@ -119,6 +143,7 @@ const DiaryPage = () => {
                 handleSave();
                 navigate('/main');
             } else if (window.confirm('저장하지 않고 이동하시겠습니까?')) {
+                localStorage.removeItem('diaryPageState');  // 저장하지 않고 이동할 경우 상태 삭제
                 navigate('/main');
             }
         } else {
@@ -153,7 +178,7 @@ const DiaryPage = () => {
                     <textarea
                         className="diary-textarea"
                         value={text}
-                        onChange={handleTextChange}
+                        onChange={handleTextChange}  // Ensure this function is defined
                         placeholder="여기에 글을 작성하세요..."
                     />
                 </div>
@@ -165,7 +190,7 @@ const DiaryPage = () => {
                         id="media-upload"
                         type="file"
                         accept="image/*,video/*"
-                        onChange={handleMediaChange}
+                        onChange={handleMediaChange}  // Ensure this function is defined
                         className="diary-file-input"
                     />
                     <button onClick={handleSave} className="diary-save-button">임시 저장</button>
