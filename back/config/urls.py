@@ -18,7 +18,8 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, re_path, include
+from django.views.generic import TemplateView
 
 
 from backend.views import (
@@ -43,4 +44,5 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     # path('accounts/', include('accounts.urls')),
     path("", include("backend.urls")),  # 'backend' 앱의 URL을 포함,
+    re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

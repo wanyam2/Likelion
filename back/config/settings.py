@@ -177,11 +177,28 @@ USE_I18N = True
 
 USE_TZ = False
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, './../front/pwa-react/build'),
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, './../front/pwa-react/build')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                # ... (other context processors)
+            ],
+        },
+    },
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -194,9 +211,9 @@ SITE_ID = 3
 
 
 # 로그인 후 리디렉션할 페이지
-LOGIN_REDIRECT_URL = "https://localhost:3000/main"
+LOGIN_REDIRECT_URL = "http://13.125.0.218:8000/main"
 # 로그아웃 후 리디렉션할 페이지
-ACCOUNT_LOGOUT_REDIRECT_URL = "https://localhost:3000"
+ACCOUNT_LOGOUT_REDIRECT_URL = "http://13.125.0.218:8000/"
 # 로그아웃 버튼 클릭 시 자동 로그아웃
 ACCOUNT_LOGOUT_ON_GET = True
 
