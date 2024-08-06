@@ -97,7 +97,7 @@ class AuthAPIView(APIView):
                 if serializer.is_valid(raise_exception=True):
                     access = serializer.validated_data.get("access", None)
                     refresh = serializer.validated_data.get("refresh", None)
-                    payload = jwt.decode(access, SECRET_KEY, algorithms=["HS256"])
+                    payload = jwt.decode(access, settings.SECRET_KEY, algorithms=["HS256"])
                     pk = payload.get("user_id")
                     user = get_object_or_404(User, pk=pk)
                     serializer = UserSerializer(instance=user)
