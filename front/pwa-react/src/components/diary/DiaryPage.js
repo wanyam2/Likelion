@@ -30,9 +30,17 @@ const DiaryPage = () => {
     useEffect(() => {
         const fetchUserId = async () => {
             try {
-                const access = Cookies.get("authaccess");
-                const refresh = Cookies.get("authrefresh");
-                const response = await axios.get('http://15.164.76.9:8000/auth/login');
+                const access = localStorage.getItem("access");
+                const refresh = localStorage.getItem("refresh");
+
+                // const formData = new FormData();
+                // formData.append('access', access);
+                // formData.append('refresh', refresh);
+                const body = { access, refresh };
+
+                const response = await axios.post(`http://13.125.0.218:8000/auth/login/?access=${access}&refresh=${refresh}`, body, {
+                    headers: { 'Content-Type': 'application/json' },
+                });
                 console.log(response);
                 setUserId(response.data.id);
                 console.log(userId);
@@ -121,7 +129,7 @@ const DiaryPage = () => {
             formData.append('userId', userId);  // 사용자 ID를 formData에 추가
 
             try {
-                const response = await axios.post('http://15.164.76.9:8000/diary-entry/', formData, {
+                const response = await axios.post('http://13.125.0.218:8000/diary-entry/', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
 

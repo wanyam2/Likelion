@@ -24,7 +24,7 @@ function RegisterPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://15.164.76.9:8000/auth/login/', formData, {
+            const response = await axios.post('http://13.125.0.218:8000/auth/login/', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

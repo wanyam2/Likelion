@@ -26,14 +26,16 @@ function RegisterPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://15.164.76.9:8000/auth/login/', formData, {
+            const response = await axios.post('http://13.125.0.218:8000/auth/login/', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
 
-            Cookies.set('authaccess', response.data.access, { expires: 7 }); // 7일 동안 유효한 쿠키 설정
-            Cookies.set('authrefresh', response.data.refresh, { expires: 7 }); // 7일 동안 유효한 쿠키 설정
+            localStorage.setItem("access", response.data.access);
+            localStorage.setItem("refresh", response.data.refresh);
+            // Cookies.set('authaccess', response.data.access, { expires: 7 }); // 7일 동안 유효한 쿠키 설정
+            // Cookies.set('authrefresh', response.data.refresh, { expires: 7 }); // 7일 동안 유효한 쿠키 설정
 
             alert('로그인 되었습니다.');
             navigate('/main'); // 페이지 이동 추가
