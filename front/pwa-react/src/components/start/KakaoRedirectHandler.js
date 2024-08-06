@@ -20,7 +20,7 @@ const KakaoRedirectHandler = () => {
             }
 
             try {
-                const response = await axios.get('http://15.164.76.9:8000/kakao/login/callback/', {
+                const response = await axios.get('http://13.125.0.218:8000/kakao/login/callback/', {
                     params: { code }
                 });
 
