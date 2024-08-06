@@ -32,6 +32,7 @@ function RegisterPage() {
                 },
             });
 
+            console.log({ response: response.data });
             localStorage.setItem("access", response.data.access);
             localStorage.setItem("refresh", response.data.refresh);
             // Cookies.set('authaccess', response.data.access, { expires: 7 }); // 7일 동안 유효한 쿠키 설정

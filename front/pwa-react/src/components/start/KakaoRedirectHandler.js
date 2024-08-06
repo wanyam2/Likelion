@@ -29,8 +29,11 @@ const KakaoRedirectHandler = () => {
 
                 const { access, refresh, isFirstLogin } = response.data;
 
-                Cookies.set('authaccess', access, { expires: 7 });
-                Cookies.set('authrefresh', refresh, { expires: 7 });
+                localStorage.setItem("access", access);
+                localStorage.setItem("refresh", refresh);
+
+                // Cookies.set('authaccess', access, { expires: 7 });
+                // Cookies.set('authrefresh', refresh, { expires: 7 });
 
                 // 최초 로그인 여부에 따라 페이지 이동
                 if (isFirstLogin) {

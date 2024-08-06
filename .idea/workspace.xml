@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="429c0995-6bab-41a6-8dd1-7d6e1579d571" name="변경" comment="[eunchae] Edit login-form &amp; ADD PWA">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/front/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/pwa-react/src/components/main/RegisterPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/pwa-react/src/components/main/RegisterPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/pwa-react/src/components/start/KakaoRedirectHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/pwa-react/src/components/start/KakaoRedirectHandler.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/pwa-react/src/components/start/LoginPage copy.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/pwa-react/src/components/start/LoginPage copy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/pwa-react/src/components/start/LoginPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/pwa-react/src/components/start/LoginPage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +98,7 @@
       <workItem from="1722682682465" duration="5363000" />
       <workItem from="1722699510472" duration="2748000" />
       <workItem from="1722848639223" duration="6170000" />
-      <workItem from="1722921812846" duration="22394000" />
+      <workItem from="1722921812846" duration="24929000" />
     </task>
     <task id="LOCAL-00001" summary="[eunchae] npm create">
       <option name="closed" value="true" />
