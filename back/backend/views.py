@@ -33,7 +33,6 @@ def get_kakao_auth_redirect_url():
 
 
 class KakaoPublishURI(APIView):
-
     def get(self, req: Request):
         return Response(data=get_kakao_auth_redirect_url(), status=200)
 
@@ -75,8 +74,7 @@ class KakaoLogin(APIView):
             },
             status=status.HTTP_200_OK,
         )
-        res.set_cookie("access", access_token, httponly=True)
-        res.set_cookie("refresh", refresh_token, httponly=True)
+
         return res
 
 
@@ -84,7 +82,7 @@ class AuthAPIView(APIView):
     # 유저 정보 확인
     def get(self, request):
         try:
-            access = request.COOKIES["access"]
+            access = request.data.get("access")
             payload = jwt.decode(access, settings.SECRET_KEY, algorithms=["HS256"])
             pk = payload.get("id")
             user = get_object_or_404(User, pk=pk)
@@ -170,9 +168,6 @@ class RegisterAPIView(APIView):
                 },
                 status=status.HTTP_200_OK,
             )
-
-            res.set_cookie("access", access_token, httponly=True)
-            res.set_cookie("refresh", refresh_token, httponly=True)
 
             return res
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
