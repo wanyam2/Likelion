@@ -13,7 +13,7 @@ const PreviousDiary = () => {
     // 사용자 ID를 가져오는 함수
     const fetchUserID = async () => {
         try {
-            const response = await axios.get('/auth/login'); // 사용자 ID를 가져오는 API 호출
+            const response = await axios.get('http://13.125.0.218:8000/auth/login'); // 사용자 ID를 가져오는 API 호출
             setUserID(response.data.userID); // userID 상태 업데이트
         } catch (error) {
             console.error('Error fetching user ID:', error);

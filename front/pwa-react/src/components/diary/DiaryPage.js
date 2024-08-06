@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './DiaryPage.css';
+import Cookies from "js-cookie";
 
 // 날짜 포맷 함수
 const formatDate = (date) => {
@@ -29,8 +30,12 @@ const DiaryPage = () => {
     useEffect(() => {
         const fetchUserId = async () => {
             try {
-                const response = await axios.get('https://15.164.76.9:8000/auth/login');
+                const access = Cookies.get("authaccess");
+                const refresh = Cookies.get("authrefresh");
+                const response = await axios.get('http://15.164.76.9:8000/auth/login');
+                console.log(response);
                 setUserId(response.data.id);
+                console.log(userId);
             } catch (error) {
                 setErrorMessage('사용자 ID를 불러오는 데 실패했습니다.');
                 console.error('Failed to fetch user ID:', error.response ? error.response.data : error.message);
@@ -102,9 +107,7 @@ const DiaryPage = () => {
     // 제출 핸들러
     const handleSave = async () => {
         if (text.trim() || media) {
-            const response = await axios.get('https://15.164.76.9:8000/auth/login');
-            console.log(response);
-            setUserId(response.data.id);
+
             console.log(userId);
             if (!userId) {
                 setErrorMessage('사용자 ID를 가져올 수 없습니다.');
@@ -118,7 +121,7 @@ const DiaryPage = () => {
             formData.append('userId', userId);  // 사용자 ID를 formData에 추가
 
             try {
-                const response = await axios.post('https://15.164.76.9:8000/diary-entry/', formData, {
+                const response = await axios.post('http://15.164.76.9:8000/diary-entry/', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
 
