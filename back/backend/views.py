@@ -82,7 +82,7 @@ class AuthAPIView(APIView):
     # 유저 정보 확인
     def get(self, request):
         try:
-            access = request.data.get("access")
+            access = request.query_params.get("access")
             payload = jwt.decode(access, settings.SECRET_KEY, algorithms=["HS256"])
             pk = payload.get("user_id")
             user = get_object_or_404(User, pk=pk)
@@ -91,7 +91,7 @@ class AuthAPIView(APIView):
 
         except jwt.exceptions.ExpiredSignatureError:
             # 토큰 만료시 갱신
-            refresh_token = request.data.get("refresh", None)
+            refresh_token = request.query_params.get("refresh", None)
             serializer = TokenRefreshSerializer(data={"refresh": refresh_token})
             try:
                 if serializer.is_valid(raise_exception=True):
