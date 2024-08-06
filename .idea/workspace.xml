@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="429c0995-6bab-41a6-8dd1-7d6e1579d571" name="변경" comment="[eunchae] Edit login-form &amp; ADD PWA">
-      <change beforePath="$PROJECT_DIR$/front/.env" beforeDir="false" afterPath="$PROJECT_DIR$/front/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/start/StartPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/start/StartPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/start/StartPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/start/StartPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/front/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,26 +41,31 @@
     <option name="showExcludedFiles" value="false" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/EUNCHAE/Developments/Likelion&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.grazie&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/EUNCHAE/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/EUNCHAE/Developments/Likelion/front/pwa-react/public/icons",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.grazie",
+    "ts.external.directory.path": "/Users/EUNCHAE/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/front/pwa-react/public/icons" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/front/src/components/start" />
-      <recent name="$PROJECT_DIR$/front/src/components/diary" />
-      <recent name="$PROJECT_DIR$/front/src/components/main" />
+      <recent name="$PROJECT_DIR$/front/pwa-react/src/components" />
+      <recent name="$PROJECT_DIR$/front/pwa-react/public" />
+      <recent name="$PROJECT_DIR$/front/pwa-react/src" />
+      <recent name="$PROJECT_DIR$/front/src" />
+      <recent name="$PROJECT_DIR$/front/public/img" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -90,7 +91,11 @@
       <workItem from="1721721039631" duration="1060000" />
       <workItem from="1721800574931" duration="5631000" />
       <workItem from="1721831563129" duration="3045000" />
-      <workItem from="1721898793049" duration="4267000" />
+      <workItem from="1721898793049" duration="5361000" />
+      <workItem from="1722682682465" duration="5363000" />
+      <workItem from="1722699510472" duration="2748000" />
+      <workItem from="1722848639223" duration="6170000" />
+      <workItem from="1722921812846" duration="22394000" />
     </task>
     <task id="LOCAL-00001" summary="[eunchae] npm create">
       <option name="closed" value="true" />
