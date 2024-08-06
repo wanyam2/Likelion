@@ -7,13 +7,14 @@ import MainPage from './components/main/MainPage';
 import MoreMenu from './components/main/MoreMenu';
 import DiaryPage from './components/diary/DiaryPage';
 import CheckDiary from './components/diary/CheckDiary';
-import Storage from './components/diary/PreviousDiary';
+import Storage from './components/diary/Storage';
 import RegisterPage from './components/main/RegisterPage';
 import SettingPage from './components/main/SettingPage';
 import StartPage from './components/start/StartPage';
 import KakaoLoginButton from './components/start/KakaoLoginButton';
 import KakaoRedirectHandler from './components/start/KakaoRedirectHandler';
-import './index.css';
+import LoginPage from './components/start/LoginPage';
+import './index.css'; // CSS 파일 import
 import PreviousDiary from "./components/diary/PreviousDiary"; // CSS 파일 import
 
 const AppContent = () => {
@@ -44,10 +45,12 @@ const AppContent = () => {
                 <Route path="/more" element={<MoreMenu />} />
                 <Route path="/diary" element={<DiaryPage />} />
                 <Route path="/check-diary" element={<CheckDiary />} />
-                <Route path="/storage" element={<PreviousDiary />} />
+                <Route path="/storage" element={<Storage />} />
                 <Route path="/settings" element={<SettingPage />} />
                 <Route path="/kakao/callback" element={<KakaoRedirectHandler />} />
                 <Route path="/kakao-login" element={<KakaoLoginButton />} />
+                <Route path="/login" element={<LoginPage />} />
+
             </Routes>
         </Router>
     );
@@ -55,9 +58,12 @@ const AppContent = () => {
 
 function App() {
     return (
-        <BlueLightProvider>
-            <AppContent />
-        </BlueLightProvider>
+        <ConfigProvider>
+            <BlueLightProvider>
+                <AppContent />
+            </BlueLightProvider>
+        </ConfigProvider>
+
     );
 }
 

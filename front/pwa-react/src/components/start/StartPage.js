@@ -19,8 +19,16 @@ const StartPage = () => {
                     if (response.data.is_first_login) {
                         navigate('/register'); // 최초 로그인일 경우 RegisterPage로 이동
                     } else {
-                        navigate('/home'); // 그렇지 않으면 HomePage로 이동
+                        navigate('/main'); // 그렇지 않으면 HomePage로 이동
                     }
+                }
+                else if(loginType == 'google'); {
+                    if (response.data.is_first_login) {
+                        navigate('/register'); //최초 로그인일 경우 BasicRegist로 이동
+                    } else {
+                        navigate('/main'); //그렇지 않으면 HomePage로 이동
+                    }
+
                 }
             })
             .catch(error => {
@@ -38,10 +46,9 @@ const StartPage = () => {
                     <div>기</div>
                 </div>
                 <div className="login-options">
-                    {/* <div className="login-option google" onClick={() => handleClick('google')}>
-                        <span className="icon">G</span>
-                        <span className="text">구글 로그인</span>
-                    </div> */}
+                    { <div className="login-option google" onClick={() => navigate('login')}>
+                        <span className="text">로그인</span>
+                    </div>}
                     <KakaoLoginButton /> {/* KakaoLoginButton 컴포넌트를 사용 */}
                     {/* <div className="login-option naver" onClick={() => handleClick('naver')}>
                         <span className="icon">N</span>
